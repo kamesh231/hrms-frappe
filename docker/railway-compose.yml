@@ -1,9 +1,11 @@
 version: "3.8"
-# Full-stack Railway deployment via Docker Compose.
-# Deploy with: railway up --compose docker/railway-compose.yml
+# Full-stack Railway deployment.
 #
-# Or use Railway's UI to add MariaDB and Redis as service plugins,
-# then deploy only the `hrms` service with the root Dockerfile.
+# Railway does not have a native MariaDB plugin (and Frappe is incompatible
+# with MySQL 8). This compose file deploys MariaDB and Redis as custom Docker
+# services alongside the app — all three run in the same Railway project.
+#
+# Deploy: railway up --compose docker/railway-compose.yml
 
 services:
   mariadb:
