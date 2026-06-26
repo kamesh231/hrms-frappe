@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vizag to Bhogapuram Airport — when to leave | FlyLine</title>
+  <meta name="description" content="Enter your area in Vizag and your flight. FlyLine calculates the exact time to leave for Bhogapuram Airport using live NH-16 traffic, airline cutoffs and terminal time." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+
+  <!-- ===== Mock-only control: switch launch phase (ADR-014 / §5.8) ===== -->
+  <div class="phase-bar">
+    <div class="wrap">
+      <span>MOCKUP CONTROL — Launch phase:</span>
+      <div class="seg">
+        <button class="js-phase active" data-phase="1">Phase 1 · ETA</button>
+        <button class="js-phase" data-phase="1.5">1.5 · Waitlist</button>
+        <button class="js-phase" data-phase="2">2 · WhatsApp</button>
+      </div>
+      <a href="index.html" style="margin-left:auto;color:#7fd7ff;font-weight:700">↩ Index</a>
+    </div>
+  </div>
+
+  <!-- ===== Top bar ===== -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand"><span class="mark">✈</span> FlyLine</div>
+      <nav class="topnav">
+        <a href="trips.html">My Trips</a>
+        <a href="support.html">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap section">
+
+    <!-- AEO block above the fold (citable Q&A, §5.3) -->
+    <div style="margin-bottom:8px">
+      <span class="chip chip-blue">Vizag → Bhogapuram (VTZ)</span>
+    </div>
+    <h1 style="font-size:26px;letter-spacing:-.02em;margin:6px 0 4px">When should you leave for Bhogapuram Airport?</h1>
+    <p class="muted" style="margin-top:0">Tell us where you're starting from and pick your flight. We do the rest.</p>
+
+    <!-- ===== Step 1 — Search card ===== -->
+    <div class="card card-pad" style="margin-top:18px">
+      <div class="search-row two">
+        <label class="field">
+          <span class="lab">Starting point</span>
+          <!-- Google Places Autocomplete (ADR-002) -->
+          <input class="input" id="origin" placeholder="e.g. Madhurawada, Blue Diamond Hotel…" value="Madhurawada" autocomplete="off" />
+        </label>
+        <div class="field">
+          <span class="lab">When</span>
+          <div class="seg" style="width:100%;display:flex">
+            <button class="js-date" data-date="today" style="flex:1">Today</button>
+            <button class="js-date active" data-date="tomorrow" style="flex:1">Tomorrow</button>
+            <button class="js-date" data-date="pick" style="flex:1">Pick date</button>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block btn-lg" id="showFlights" style="margin-top:14px">Show flights</button>
+    </div>
+
+    <!-- ===== Step 2 — Flights list (revealed) ===== -->
+    <section id="flightsStep" class="hidden" style="margin-top:22px">
+      <div class="muted" style="font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:12px;margin-bottom:10px">
+        Departures from VTZ · Tomorrow
+      </div>
+      <div class="stack" id="flightsList"></div>
+    </section>
+
+    <!-- ===== Step 3 — Calculating (revealed) ===== -->
+    <section id="calcStep" class="hidden" style="margin-top:22px">
+      <div class="card card-pad">
+        <div style="font-weight:800;font-size:16px;margin-bottom:6px">Working out your pickup time…</div>
+        <div id="calcSteps"></div>
+      </div>
+    </section>
+
+    <!-- ===== Step 4 — Timeline result (revealed) ===== -->
+    <section id="resultStep" class="hidden" style="margin-top:22px">
+
+      <div class="leaveby">
+        <div class="lbl">Leave home by</div>
+        <div class="time" id="leaveTime">4:10am</div>
+        <div class="from">From Madhurawada · NH-16 to Bhogapuram</div>
+      </div>
+
+      <div class="card card-pad" style="margin-top:14px">
+        <div class="tl">
+          <div class="tl-row">
+            <div class="tl-node"></div>
+            <div class="tl-body"><div class="tl-title">Leave home</div><div class="tl-sub">Cab arrives, you step out</div></div>
+            <div class="tl-meta" id="tlLeave">4:10am</div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-node"></div>
+            <div class="tl-body"><div class="tl-title">Drive on NH-16</div><div class="tl-sub" id="tlDriveSub">NH-16, 74 min · cab (+8m wait)</div></div>
+            <div class="tl-meta">74m</div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-node"></div>
+            <div class="tl-body"><div class="tl-title">Arrive airport</div><div class="tl-sub">Drop-off at Terminal 1</div></div>
+            <div class="tl-meta" id="tlArrive">5:32am</div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-node"></div>
+            <div class="tl-body"><div class="tl-title">Check-in closes</div><div class="tl-sub" id="tlAirline">IndiGo closes check-in · 45m before</div></div>
+            <div class="tl-meta" id="tlCutoff">5:30am</div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-node"></div>
+            <div class="tl-body"><div class="tl-title">Security + gate walk</div><div class="tl-sub" id="tlTermSub">30 min · online check-in done</div></div>
+            <div class="tl-meta">30m</div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-node is-dep"></div>
+            <div class="tl-body"><div class="tl-title">Flight departs</div><div class="tl-sub" id="tlDepartSub">IndiGo 6E 512 → Hyderabad · On time</div></div>
+            <div class="tl-meta" id="tlDepart">6:15am</div>
+          </div>
+        </div>
+
+        <div class="buffer-bar" id="bufferBar" style="margin-top:6px">
+          <span>🟢</span>
+          <div class="track"><div class="fill" id="bufferFill" style="width:60%"></div></div>
+          <strong id="bufferLabel" style="white-space:nowrap;font-size:13.5px">18 min buffer — comfortable</strong>
+        </div>
+      </div>
+
+      <!-- Adjust your journey (collapsed, ADR-012 / §5.6) -->
+      <div class="card" style="margin-top:14px">
+        <div class="adjust-head" id="adjustHead">
+          <div>
+            <div style="font-weight:800">Adjust your journey</div>
+            <div class="muted" style="font-size:13px">Own car? Online check-in? Cabin only?</div>
+          </div>
+          <span id="adjustCaret" style="font-size:18px;transition:transform .2s">⌄</span>
+        </div>
+
+        <div id="adjustBody" class="hidden" style="margin-top:8px">
+          <div class="toggle-row">
+            <div class="meta"><div class="t-name">Own car</div><div class="t-desc">Skip the cab wait; choose parking or drop-off</div></div>
+            <label class="switch"><input type="checkbox" class="js-toggle" data-key="ownCar"><span class="slot"></span><span class="knob"></span></label>
+          </div>
+          <div id="parkingChoice" class="hidden" style="padding-bottom:10px">
+            <div class="seg subchoice">
+              <button class="js-park active" data-park="DROPOFF">Drop-off (+0m)</button>
+              <button class="js-park" data-park="PARKING">Parking (+15m)</button>
+            </div>
+          </div>
+          <div class="toggle-row">
+            <div class="meta"><div class="t-name">Online check-in done</div><div class="t-desc">Skip the counter queue (~15 min)</div></div>
+            <label class="switch"><input type="checkbox" class="js-toggle" data-key="onlineCheckin" checked><span class="slot"></span><span class="knob"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="meta"><div class="t-name">Cabin baggage only</div><div class="t-desc">With online check-in, skip the counter entirely</div></div>
+            <label class="switch"><input type="checkbox" class="js-toggle" data-key="cabinOnly"><span class="slot"></span><span class="knob"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="meta"><div class="t-name">Window-shopping buffer</div><div class="t-desc">15 min of relaxed airport time</div></div>
+            <label class="switch"><input type="checkbox" class="js-toggle" data-key="browse" checked><span class="slot"></span><span class="knob"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Share — present in ALL phases -->
+      <button class="btn btn-ghost btn-block btn-lg" id="shareBtn" style="margin-top:14px">🔗 Share this timeline</button>
+
+      <!-- Phase 1.5 — Email waitlist (shown only in phase 1.5) -->
+      <div id="phase15" class="card card-pad hidden" style="margin-top:14px">
+        <div style="font-weight:800">Want a WhatsApp reminder before your flight?</div>
+        <p class="muted" style="margin:6px 0 12px">We're building it. Get an email when reminders go live.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input class="input" placeholder="you@email.com" style="flex:1;min-width:180px" />
+          <button class="btn btn-primary">Notify me</button>
+        </div>
+      </div>
+
+      <!-- Phase 2 — WhatsApp opt-in (shown only in phase 2) -->
+      <div id="phase2" class="card card-pad hidden" style="margin-top:14px;border-color:#BFE9CE">
+        <div style="font-weight:800">Send this to your WhatsApp — free</div>
+        <p class="muted" style="margin:6px 0 12px">We'll remind you at the right time, the evening before. One tap to confirm.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input class="input" placeholder="+91 mobile number" style="flex:1;min-width:180px" value="+91 " />
+          <button class="btn btn-wa">Send to WhatsApp</button>
+        </div>
+        <p class="muted" style="font-size:12px;margin:10px 0 0">You'll get a confirmation message — reply <b>YES</b> to start. (Meta double opt-in)</p>
+      </div>
+
+    </section>
+
+    <!-- ===== AEO / FAQ block (static, citable — §5.3) ===== -->
+    <section class="section" id="faq" style="margin-top:10px">
+      <h2 style="font-size:20px;letter-spacing:-.01em">Common questions</h2>
+      <div class="card card-pad" style="margin-top:10px">
+        <div class="qa">
+          <div class="q">What time should I leave for Bhogapuram Airport from Madhurawada?</div>
+          <div class="a">From Madhurawada, allow 70–80 minutes via NH-16. Add your airline's check-in cutoff (45 min IndiGo, 60 min Air India) and ~35 min terminal processing. For a 6:15am flight, leave by 4:10am.</div>
+        </div>
+        <div class="qa">
+          <div class="q">How far is Bhogapuram Airport from Visakhapatnam?</div>
+          <div class="a">Bhogapuram Airport (VTZ) is about 42 km from Vizag city centre via NH-16. Drive time ranges from 65 minutes off-peak to 85 minutes at morning peak.</div>
+        </div>
+        <div class="qa">
+          <div class="q">What is IndiGo's check-in cutoff at Bhogapuram?</div>
+          <div class="a">IndiGo closes check-in 45 minutes before departure for domestic flights. SpiceJet is 45 minutes; Air India is 60 minutes. FlyLine applies your airline's exact cutoff automatically.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site">
+    flyline.in/vizag-to-bhogapuram · <a href="index.html">All mockups</a>
+  </footer>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

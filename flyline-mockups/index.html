@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FlyLine — HTML mockups index</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap"><div class="brand"><span class="mark">✈</span> FlyLine · Mockups</div>
+      <span class="chip chip-grey">v1.0 · VTZ</span>
+    </div>
+  </header>
+
+  <main class="wrap section">
+    <h1 style="font-size:26px;margin:0 0 6px">FlyLine — clickable HTML mockups</h1>
+    <p class="muted" style="margin-top:0;max-width:60ch">Static prototype of every screen in PRD v4 + ADR v2, for handoff to Codex. Built with plain HTML/CSS/JS — no build step. The city page is fully interactive (search → flights → calculating → timeline → toggles).</p>
+
+    <div class="hub-grid" style="margin-top:22px">
+      <a class="hub-card" href="landing.html">
+        <span class="rt">flyline.in</span>
+        <h3>Landing page</h3>
+        <p>Full-viewport hero, search widget, social proof, city links. §5.2</p>
+      </a>
+      <a class="hub-card" href="city.html">
+        <span class="rt">/vizag-to-bhogapuram</span>
+        <h3>City discovery flow ★</h3>
+        <p>Interactive single-page reveal + phase switcher + FAQ/AEO. §5.6, ADR-003</p>
+      </a>
+      <a class="hub-card" href="shared-timeline.html">
+        <span class="rt">/t/[token]</span>
+        <h3>Shared timeline</h3>
+        <p>Read-only result from a signed JWT + opt-in CTA. ADR-011</p>
+      </a>
+      <a class="hub-card" href="trips.html">
+        <span class="rt">/trips</span>
+        <h3>My Trips</h3>
+        <p>Active / past trips, referral credits. Clerk-gated. §5.4</p>
+      </a>
+      <a class="hub-card" href="support.html">
+        <span class="rt">/support</span>
+        <h3>Support</h3>
+        <p>Paid-only gate + WhatsApp redirect. §5.5</p>
+      </a>
+      <a class="hub-card" href="whatsapp.html">
+        <span class="rt">WhatsApp layer</span>
+        <h3>Message previews</h3>
+        <p>All 5 trip phases + inbound redirect. ADR-006</p>
+      </a>
+    </div>
+
+    <div class="card card-pad" style="margin-top:24px">
+      <div style="font-weight:800;margin-bottom:6px">Notes for the build</div>
+      <ul class="muted" style="font-size:14px;margin:0;padding-left:18px;line-height:1.8">
+        <li>Design tokens live in <code>assets/styles.css</code> (<code>:root</code>) — colours, radii, shadows, buffer semantics.</li>
+        <li>The 4-state machine and toggle recalculation logic is mocked in <code>assets/app.js</code>.</li>
+        <li>Buffer colour: green &gt;20m, amber 10–20m, red &lt;10m (per flight-card + buffer bar).</li>
+        <li>Phase switcher (top of city page) toggles Phase 1 / 1.5 / 2 CTAs per ADR-014.</li>
+        <li>See <code>README.md</code> for the screen→spec map.</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="site">FlyLine mockups · flyline.in</footer>
+</body>
+</html>

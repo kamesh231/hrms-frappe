@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FlyLine — When should you leave for the airport?</title>
+  <meta name="description" content="FlyLine tells Vizag travellers the exact time to leave home for Bhogapuram Airport — live NH-16 traffic, airline check-in cutoffs, terminal time. No sign-up." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <!-- ============ Landing route: flyline.in (§5.2) ============ -->
+  <section class="hero">
+    <!-- CMS-controlled airport background (ADR-013 / R2 + site_config) -->
+    <div class="hero-bg" role="img" aria-label="Bhogapuram Airport at dawn"></div>
+
+    <div class="wrap">
+      <div class="hero-top">
+        <div class="brand"><span class="mark">✈</span> FlyLine</div>
+        <!-- Returning-user state surfaces here (§5.2 Landing States) -->
+        <a href="trips.html" style="color:#fff;font-weight:600;font-size:14px;opacity:.92">My Trips</a>
+      </div>
+
+      <div class="hero-center">
+        <h1>When should you leave for the airport?</h1>
+
+        <!-- Search widget: Airport (pre-selected VTZ) + Date + single CTA -->
+        <div class="search-card">
+          <div class="search-row two">
+            <label class="field">
+              <span class="lab">Starting point</span>
+              <input class="input" id="originLanding" placeholder="Area, hotel or address in Vizag" />
+            </label>
+            <label class="field">
+              <span class="lab">Airport</span>
+              <input class="input" value="Bhogapuram (VTZ)" readonly />
+            </label>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:10px;align-items:center;flex-wrap:wrap">
+            <div class="seg">
+              <button class="active">Today</button>
+              <button>Tomorrow</button>
+              <button>Pick date</button>
+            </div>
+            <a class="btn btn-primary btn-lg" href="city.html" style="margin-left:auto">Show my flights →</a>
+          </div>
+        </div>
+
+        <p class="subtext">No sign-up. No app. Just your exact pickup time.</p>
+        <p class="social"><span class="dot-live"></span> 3,247 travellers got their pickup time right this month.</p>
+      </div>
+    </div>
+
+    <div class="hero-footer">
+      <div class="wrap" style="display:flex;gap:16px;align-items:center">
+        <span style="font-weight:700">flyline.in</span>
+        <a href="#">Privacy</a><a href="#">Contact</a>
+        <a href="index.html" style="margin-left:auto">↩ Mockup index</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- City CTA links below the fold (kept minimal per spec) -->
+  <section class="section">
+    <div class="wrap">
+      <div class="muted" style="font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:12px;margin-bottom:12px">Cities</div>
+      <div class="hub-grid">
+        <a class="hub-card" href="city.html">
+          <span class="rt">flyline.in/vizag-to-bhogapuram</span>
+          <h3>Vizag → Bhogapuram (VTZ)</h3>
+          <p>Live now · NH-16 timing for every flight</p>
+        </a>
+        <a class="hub-card" href="#" style="opacity:.6">
+          <span class="rt">flyline.in/hyderabad-to-rgia</span>
+          <h3>Hyderabad → RGIA</h3>
+          <p>Coming in Phase 2</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site">
+    flyline.in · Bhogapuram Airport (VTZ) · <a href="index.html">All mockups</a>
+  </footer>
+
+  <script>
+    // tiny enable-on-type for the hero CTA (full flow lives on city.html)
+    var i = document.getElementById('originLanding');
+  </script>
+</body>
+</html>

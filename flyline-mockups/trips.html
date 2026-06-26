@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Trips | FlyLine</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <!-- ===== /trips — Clerk phone OTP gated (ADR-009 / §5.4) ===== -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand"><span class="mark">✈</span> FlyLine</div>
+      <nav class="topnav"><a href="city.html">New trip</a><a href="support.html">Support</a></nav>
+    </div>
+  </header>
+
+  <main class="wrap section">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <h1 style="font-size:24px;margin:0">My Trips</h1>
+      <span class="chip chip-grey">+91 98xxx xxx21</span>
+    </div>
+
+    <!-- Active trip -->
+    <div class="muted" style="font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:12px;margin:18px 0 10px">Active trip</div>
+    <div class="trip-active">
+      <div class="row">
+        <div>
+          <div style="font-weight:800;font-size:18px">IndiGo 6E 512 → Hyderabad</div>
+          <div style="opacity:.85;font-size:13.5px;margin-top:2px">Tomorrow · departs 6:15am</div>
+        </div>
+        <span class="chip chip-green" style="background:rgba(255,255,255,.18);color:#cdfbe4">On time</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px">
+        <div>
+          <div style="opacity:.8;font-size:12px;text-transform:uppercase;letter-spacing:.06em">Pickup</div>
+          <div style="font-weight:800;font-size:22px">4:10am</div>
+        </div>
+        <a class="btn btn-ghost" href="shared-timeline.html" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.25)">View live timeline →</a>
+      </div>
+    </div>
+
+    <!-- Referral credits -->
+    <div class="card card-pad" style="margin-top:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div>
+          <div style="font-weight:800">Refer a friend, earn ₹5</div>
+          <div class="muted" style="font-size:13.5px">Balance: <strong style="color:var(--green)">₹10</strong> · expires 12 Sep 2026</div>
+        </div>
+        <button class="btn btn-primary">Copy referral link</button>
+      </div>
+      <div class="chip chip-blue" style="margin-top:12px;font-family:ui-monospace,Menlo,monospace">flyline.in/r/FL-KM47</div>
+    </div>
+
+    <!-- Past trips -->
+    <div class="muted" style="font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:12px;margin:22px 0 6px">Past trips</div>
+    <div class="card">
+      <div class="list-item">
+        <div class="airline-badge al-indigo">6E</div>
+        <div style="flex:1"><div style="font-weight:700">6E 512 → Hyderabad</div><div class="muted" style="font-size:13px">12 Jun · pickup 4:10am</div></div>
+        <span class="chip chip-green">★ Perfect</span>
+      </div>
+      <div class="list-item">
+        <div class="airline-badge al-airindia">AI</div>
+        <div style="flex:1"><div style="font-weight:700">AI 543 → Delhi</div><div class="muted" style="font-size:13px">28 May · pickup 5:40am</div></div>
+        <span class="chip chip-amber">Slightly early</span>
+      </div>
+      <div class="list-item">
+        <div class="airline-badge al-spicejet">SG</div>
+        <div style="flex:1"><div style="font-weight:700">SG 231 → Bengaluru</div><div class="muted" style="font-size:13px">3 May · pickup 7:15am</div></div>
+        <span class="chip chip-grey">Not rated</span>
+      </div>
+    </div>
+
+    <p class="muted" style="font-size:13px;margin-top:18px">Phone number is managed by Clerk · <a href="#">Sign out</a></p>
+  </main>
+
+  <footer class="site">flyline.in/trips · <a href="index.html">All mockups</a></footer>
+</body>
+</html>

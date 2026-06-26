@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Support | FlyLine</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <!-- ===== /support — gated to paid Morning Companion users (§5.5) ===== -->
+  <div class="phase-bar">
+    <div class="wrap">
+      <span>MOCKUP CONTROL — Access state:</span>
+      <div class="seg">
+        <button class="js-access active" data-state="paid">Paid user</button>
+        <button class="js-access" data-state="free">Free user</button>
+      </div>
+      <a href="index.html" style="margin-left:auto;color:#7fd7ff;font-weight:700">↩ Index</a>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand"><span class="mark">✈</span> FlyLine</div>
+      <nav class="topnav"><a href="trips.html">My Trips</a><a href="city.html">New trip</a></nav>
+    </div>
+  </header>
+
+  <main class="wrap section">
+    <h1 style="font-size:24px;margin:0 0 18px">Support</h1>
+
+    <!-- Paid state -->
+    <div id="paidState">
+      <div class="card card-pad">
+        <div style="font-weight:800;font-size:18px">Chat with us on WhatsApp</div>
+        <p class="muted" style="margin:6px 0 14px">We respond during business hours, 9am–9pm IST. In transit? Use the priority line below.</p>
+        <a class="btn btn-wa btn-block btn-lg" href="#">💬 Open WhatsApp chat</a>
+        <p class="muted" style="font-size:12.5px;margin:12px 0 0">Pre-filled: “Hi FlyLine support, I need help with trip #VTZ-6E512-0627 — …”</p>
+      </div>
+
+      <div class="card card-pad" style="margin-top:14px">
+        <div style="font-weight:800;margin-bottom:8px">Response times</div>
+        <div class="list-item"><div style="flex:1">Wrong pickup time calculated</div><span class="chip chip-green">&lt; 30 min</span></div>
+        <div class="list-item"><div style="flex:1">Payment / double charge</div><span class="chip chip-green">&lt; 1 hr</span></div>
+        <div class="list-item"><div style="flex:1">Message not received</div><span class="chip chip-amber">&lt; 2 hrs</span></div>
+        <div class="list-item"><div style="flex:1">Refund request</div><span class="chip chip-amber">&lt; 24 hrs</span></div>
+      </div>
+    </div>
+
+    <!-- Free state (gate) -->
+    <div id="freeState" class="hidden">
+      <div class="card gate">
+        <div class="lock">🔒</div>
+        <h2 style="font-size:19px;margin:8px 0 6px">Support is for Morning Companion subscribers</h2>
+        <p class="muted" style="max-width:42ch;margin:0 auto 16px">Your next trip update includes priority support. Add live morning updates for ₹29 and chat with us any time.</p>
+        <a class="btn btn-primary btn-lg" href="city.html">See my next trip — ₹29</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site">flyline.in/support · <a href="index.html">All mockups</a></footer>
+
+  <script>
+    document.querySelectorAll('.js-access').forEach(function(b){
+      b.addEventListener('click', function(){
+        document.querySelectorAll('.js-access').forEach(function(x){x.classList.remove('active');});
+        b.classList.add('active');
+        var paid = b.dataset.state === 'paid';
+        document.getElementById('paidState').classList.toggle('hidden', !paid);
+        document.getElementById('freeState').classList.toggle('hidden', paid);
+      });
+    });
+  </script>
+</body>
+</html>

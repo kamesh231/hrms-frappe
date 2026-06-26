@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WhatsApp message layer | FlyLine</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .wa-grid { display:grid; grid-template-columns:1fr; gap:30px; }
+    @media (min-width:880px){ .wa-grid{ grid-template-columns:1fr 1fr; } }
+    .phase-label{ font-weight:800; font-size:15px; margin-bottom:4px; }
+    .phase-note{ color:var(--muted); font-size:13px; margin-bottom:14px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand"><span class="mark">✈</span> FlyLine</div>
+      <a href="index.html" class="topnav" style="font-weight:600;font-size:14px">↩ Index</a>
+    </div>
+  </header>
+
+  <main class="wrap section">
+    <h1 style="font-size:24px;margin:0 0 4px">WhatsApp intelligence layer</h1>
+    <p class="muted" style="margin-top:0">Every message is Claude-generated from live context — not a static template (ADR-006). These are previews of the 5-phase per-trip journey.</p>
+
+    <div class="wa-grid" style="margin-top:24px">
+
+      <!-- Phase 2 — T-12h reminder -->
+      <div>
+        <div class="phase-label">Phase 2 · T-12h reminder (free, conversion trigger)</div>
+        <div class="phase-note">Clamped to 6am–10pm. Pickup time + open loop + ₹29 CTA.</div>
+        <div class="phone"><div class="phone-screen">
+          <div class="wa-head"><div class="av">F</div><div><div class="nm">FlyLine</div><div class="st">business account</div></div></div>
+          <div class="wa-body">
+            <div class="wa-tag">Yesterday 6:15 PM</div>
+            <div class="bubble in">
+              FlyLine check-in — your <b>IndiGo 6E-512 to Delhi</b> departs tomorrow at <b>9:40am</b>.<br><br>
+              Based on today's NH-16 data, your pickup window is <b>6:15am from Madhurawada</b>.<br><br>
+              NH-16 is running lighter than average at that hour on Wednesdays — you have a comfortable buffer. IndiGo's 45-min cutoff means the counter closes at 8:55am. Your window gives you 18 minutes of slack.<br><br>
+              Tomorrow morning we'll confirm if this still holds — or tell you to move earlier if NH-16 is acting up.
+              <span class="cta">Watch it tomorrow → ₹29 only</span>
+              <span class="time">6:15 PM</span>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Phase 2 — 6am fallback -->
+      <div>
+        <div class="phase-label">Phase 2 · Non-converter fallback (6am, departure day)</div>
+        <div class="phase-note">Fires only if not yet paid. Morning anxiety peak.</div>
+        <div class="phone"><div class="phone-screen">
+          <div class="wa-head"><div class="av">F</div><div><div class="nm">FlyLine</div><div class="st">business account</div></div></div>
+          <div class="wa-body">
+            <div class="wa-tag">Today 6:00 AM</div>
+            <div class="bubble in">
+              One thing about your <b>6:15am pickup</b> today —<br><br>
+              NH-16 is showing 12 minutes heavier than yesterday at 6am. Your window is tighter than average today. Worth leaving 10 minutes earlier if you can — puts you ahead of the squeeze at the BRTS junction.<br><br>
+              Real-time updates through your journey: ₹29. Reply <b>TRACK</b>.
+              <span class="time">6:00 AM</span>
+            </div>
+            <div class="bubble out">TRACK<span class="time">6:02 AM ✓✓</span></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Phase 3 — Morning Companion -->
+      <div>
+        <div class="phase-label">Phase 3 · Morning Companion (paid, ₹29)</div>
+        <div class="phase-note">T-3h brief → T-90min → step-out nudge.</div>
+        <div class="phone"><div class="phone-screen">
+          <div class="wa-head"><div class="av">F</div><div><div class="nm">FlyLine</div><div class="st">online</div></div></div>
+          <div class="wa-body">
+            <div class="wa-tag">Today</div>
+            <div class="bubble in">
+              <b>6:15am pickup still on.</b><br><br>
+              Checked three times — NH-16 is behaving this morning. No incidents between Madhurawada and the airport junction. IndiGo 6E-512 shows no delay. Your 18-minute buffer is intact.<br><br>
+              We'll ping again if anything changes before step-out time.
+              <span class="time">3:15 AM</span>
+            </div>
+            <div class="bubble in">
+              Final check — still on schedule. No delay on 6E-512. Step out at 6:15am sharp.
+              <span class="time">4:45 AM</span>
+            </div>
+            <div class="bubble in">
+              <b>Time to go.</b> 🚕<br><br>
+              Your cab should be here by 6:15am. NH-16 is clear. IndiGo 6E-512: on time, terminal entry smooth.<br><br>
+              Safe travels. We'll keep watching until you board.
+              <span class="time">6:10 AM</span>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Phase 4 — In transit -->
+      <div>
+        <div class="phase-label">Phase 4 · In transit (silent by default)</div>
+        <div class="phase-note">Only speaks on a &gt;20 min delay shift, then restore.</div>
+        <div class="phone"><div class="phone-screen">
+          <div class="wa-head"><div class="av">F</div><div><div class="nm">FlyLine</div><div class="st">online</div></div></div>
+          <div class="wa-body">
+            <div class="wa-tag">Today 8:05 AM</div>
+            <div class="bubble in">
+              <b>6E-512 delayed 45 minutes.</b> New departure: 10:25am.<br><br>
+              You now have extra buffer — no rush at security. Check-in counter is still open; take your time through the terminal. With the new departure, you have 22 minutes of slack even accounting for the delay. IndiGo hasn't updated the gate yet — I'll send the gate number when confirmed.
+              <span class="time">8:05 AM</span>
+            </div>
+            <div class="bubble in">
+              ✅ <b>Flight back on time.</b> Your original 9:40am window is back — you're well-positioned.
+              <span class="time">8:40 AM</span>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Phase 5 — Post flight -->
+      <div>
+        <div class="phase-label">Phase 5 · Post-flight feedback (all users)</div>
+        <div class="phase-note">T+15 boarding check → Landing+30 rating → referral.</div>
+        <div class="phone"><div class="phone-screen">
+          <div class="wa-head"><div class="av">F</div><div><div class="nm">FlyLine</div><div class="st">business account</div></div></div>
+          <div class="wa-body">
+            <div class="wa-tag">Today</div>
+            <div class="bubble in">
+              Did you board comfortably?<br><br>
+              Reply: <b>1</b> Yes, smooth · <b>2</b> A bit rushed · <b>3</b> Nearly missed it
+              <span class="time">9:55 AM</span>
+            </div>
+            <div class="bubble out">1<span class="time">9:58 AM ✓✓</span></div>
+            <div class="bubble in">
+              IndiGo 6E-512 touched down in Delhi at 11:52am. Was <b>6:15am from Madhurawada</b> the right pickup time?<br><br>
+              Reply: <b>1</b> Perfect · <b>2</b> Too early · <b>3</b> Too late / close
+              <span class="time">12:22 PM</span>
+            </div>
+            <div class="bubble in">
+              Know someone flying from Vizag? Forward this — their first trip is always free.<br><br>
+              Your code: <b>FL-KM47</b><br>flyline.in/r/FL-KM47
+              <span class="time">12:23 PM</span>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Inbound redirect -->
+      <div>
+        <div class="phase-label">Inbound "Hi" → web redirect (no bot, ADR-015)</div>
+        <div class="phase-note">Any inbound message gets one pre-approved redirect reply.</div>
+        <div class="phone"><div class="phone-screen">
+          <div class="wa-head"><div class="av">F</div><div><div class="nm">FlyLine</div><div class="st">business account</div></div></div>
+          <div class="wa-body">
+            <div class="wa-tag">Today</div>
+            <div class="bubble out">Hi<span class="time">10:30 AM ✓✓</span></div>
+            <div class="bubble in">
+              Hi! To search flights and see your airport timeline, visit:<br><br>
+              <b>flyline.in/vizag-to-bhogapuram</b> 🛫<br><br>
+              It's instant — enter your area and pick your flight.
+              <span class="time">10:30 AM</span>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site">Claude Haiku + Sonnet generated · <a href="index.html">All mockups</a></footer>
+</body>
+</html>
