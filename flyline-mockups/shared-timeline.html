@@ -10,7 +10,10 @@
   <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
-  <!-- ===== /t/[token] — read-only result from a signed JWT (ADR-011) ===== -->
+  <!-- ===== /t/[token] — read-only result from a signed JWT (ADR-011) =====
+       Per PRD Phase 1 edge cases: "User revisits /t/[token]: read-only
+       timeline. Toggle adjustments still work. Opt-in CTA at bottom."
+       Adjusting toggles re-signs a new JWT on Copy link. -->
   <header class="topbar">
     <div class="wrap">
       <div class="brand"><span class="mark">✈</span> FlyLine</div>
@@ -21,28 +24,76 @@
   <main class="wrap section">
     <div class="notice" style="margin-bottom:18px">
       <strong>Someone shared this timeline with you.</strong>
-      <div class="muted" style="font-size:13.5px;margin-top:4px">Read-only · for IndiGo 6E 512 from Madhurawada · valid 4 days</div>
+      <div class="muted" style="font-size:13.5px;margin-top:4px">For IndiGo 6E 512 from Madhurawada · valid 4 days · adjust the options below to fit your journey</div>
     </div>
 
-    <div class="leaveby">
-      <div class="lbl">Leave home by</div>
-      <div class="time">4:10am</div>
-      <div class="from">From Madhurawada · NH-16 to Bhogapuram</div>
-    </div>
+    <!-- Reusable, interactive timeline result block -->
+    <div class="result-block" data-flight='{"code":"6E 512","airline":"IndiGo","cls":"al-indigo","to":"Hyderabad","dep":"06:15","cutoff":45,"status":"On time"}'>
 
-    <div class="card card-pad" style="margin-top:14px">
-      <div class="tl">
-        <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Leave home</div><div class="tl-sub">Cab arrives, you step out</div></div><div class="tl-meta">4:10am</div></div>
-        <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Drive on NH-16</div><div class="tl-sub">74 min · clear at this hour</div></div><div class="tl-meta">74m</div></div>
-        <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Arrive airport</div><div class="tl-sub">Drop-off at Terminal 1</div></div><div class="tl-meta">5:32am</div></div>
-        <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Check-in closes</div><div class="tl-sub">IndiGo · 45m before</div></div><div class="tl-meta">5:30am</div></div>
-        <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Security + gate walk</div><div class="tl-sub">30 min · online check-in done</div></div><div class="tl-meta">30m</div></div>
-        <div class="tl-row"><div class="tl-node is-dep"></div><div class="tl-body"><div class="tl-title">Flight departs</div><div class="tl-sub">IndiGo 6E 512 → Hyderabad · On time</div></div><div class="tl-meta">6:15am</div></div>
+      <div class="leaveby">
+        <div class="lbl">Leave home by</div>
+        <div class="time r-leave">4:10am</div>
+        <div class="from">From Madhurawada · NH-16 to Bhogapuram</div>
       </div>
-      <div class="buffer-bar" style="margin-top:6px">
-        <span>🟢</span><div class="track"><div class="fill" style="width:60%"></div></div>
-        <strong style="white-space:nowrap;font-size:13.5px">18 min buffer — comfortable</strong>
+
+      <div class="stat-strip">
+        <div class="stat"><div class="sv r-toair">1h 22m</div><div class="sl">Door → airport</div></div>
+        <div class="stat"><div class="sv r-bufferStat">18m</div><div class="sl">Buffer at check-in</div></div>
+        <div class="stat"><div class="sv r-total">2h 5m</div><div class="sl">Home → departure</div></div>
       </div>
+
+      <div class="card card-pad" style="margin-top:14px">
+        <div class="tl">
+          <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Leave home</div><div class="tl-sub">Cab arrives, you step out</div></div><div class="tl-meta r-tlLeave">4:10am</div></div>
+          <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Drive on NH-16</div><div class="tl-sub r-tlDriveSub">NH-16, 74 min · cab (+8m wait)</div></div><div class="tl-meta r-tlDrive">1h 14m</div></div>
+          <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Arrive airport</div><div class="tl-sub">Drop-off at Terminal 1</div></div><div class="tl-meta r-tlArrive">5:32am</div></div>
+          <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Check-in closes</div><div class="tl-sub r-tlAirline">IndiGo · 45m before</div></div><div class="tl-meta r-tlCutoff">5:30am</div></div>
+          <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Security + gate walk</div><div class="tl-sub r-tlTermSub">30 min · online check-in done</div></div><div class="tl-meta r-tlTerm">30m</div></div>
+          <div class="tl-row"><div class="tl-node is-dep"></div><div class="tl-body"><div class="tl-title">Flight departs</div><div class="tl-sub r-tlDepartSub">IndiGo 6E 512 → Hyderabad · On time</div></div><div class="tl-meta r-tlDepart">6:15am</div></div>
+        </div>
+        <div class="buffer-bar r-bufferBar" style="margin-top:6px">
+          <span>🟢</span><div class="track"><div class="fill r-bufferFill" style="width:60%"></div></div>
+          <strong class="r-bufferLabel" style="white-space:nowrap;font-size:13.5px">18 min buffer — comfortable</strong>
+        </div>
+      </div>
+
+      <!-- Adjust your journey — works on the shared page too (ADR-012) -->
+      <div class="card" style="margin-top:14px">
+        <div class="adjust-head">
+          <div>
+            <div style="font-weight:800">Adjust to your journey</div>
+            <div class="muted" style="font-size:13px">Own car? Online check-in? Cabin only?</div>
+          </div>
+          <span class="adjust-caret">⌄</span>
+        </div>
+        <div class="adjust-body hidden" style="margin-top:8px">
+          <div class="toggle-row">
+            <div class="meta"><div class="t-name">Own car</div><div class="t-desc">Skip the cab wait; choose parking or drop-off</div></div>
+            <label class="switch"><input type="checkbox" class="js-toggle" data-key="ownCar"><span class="slot"></span><span class="knob"></span></label>
+          </div>
+          <div class="parking-choice hidden" style="padding-bottom:10px">
+            <div class="seg subchoice">
+              <button class="js-park active" data-park="DROPOFF">Drop-off (+0m)</button>
+              <button class="js-park" data-park="PARKING">Parking (+15m)</button>
+            </div>
+          </div>
+          <div class="toggle-row">
+            <div class="meta"><div class="t-name">Online check-in done</div><div class="t-desc">Skip the counter queue (~15 min)</div></div>
+            <label class="switch"><input type="checkbox" class="js-toggle" data-key="onlineCheckin" checked><span class="slot"></span><span class="knob"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="meta"><div class="t-name">Cabin baggage only</div><div class="t-desc">With online check-in, skip the counter entirely</div></div>
+            <label class="switch"><input type="checkbox" class="js-toggle" data-key="cabinOnly"><span class="slot"></span><span class="knob"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="meta"><div class="t-name">Window-shopping buffer</div><div class="t-desc">15 min of relaxed airport time</div></div>
+            <label class="switch"><input type="checkbox" class="js-toggle" data-key="browse" checked><span class="slot"></span><span class="knob"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Share — re-signs a new JWT from the adjusted state on copy (ADR-011) -->
+      <button class="btn btn-ghost btn-block btn-lg r-share" style="margin-top:14px">🔗 Copy my adjusted link</button>
     </div>
 
     <!-- Opt-in CTA at the bottom — the viral entry point (ADR-001) -->
@@ -54,5 +105,7 @@
   </main>
 
   <footer class="site">flyline.in/t/eyJhbGciOiJI… · <a href="index.html">All mockups</a></footer>
+
+  <script src="assets/app.js"></script>
 </body>
 </html>

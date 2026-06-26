@@ -83,91 +83,102 @@
     <!-- ===== Step 4 — Timeline result (revealed) ===== -->
     <section id="resultStep" class="hidden" style="margin-top:22px">
 
-      <div class="leaveby">
-        <div class="lbl">Leave home by</div>
-        <div class="time" id="leaveTime">4:10am</div>
-        <div class="from">From Madhurawada · NH-16 to Bhogapuram</div>
-      </div>
+      <!-- Reusable timeline result block (also used on /t/[token]) -->
+      <div class="result-block" data-flight='{"code":"6E 512","airline":"IndiGo","cls":"al-indigo","to":"Hyderabad","dep":"06:15","cutoff":45,"status":"On time"}'>
 
-      <div class="card card-pad" style="margin-top:14px">
-        <div class="tl">
-          <div class="tl-row">
-            <div class="tl-node"></div>
-            <div class="tl-body"><div class="tl-title">Leave home</div><div class="tl-sub">Cab arrives, you step out</div></div>
-            <div class="tl-meta" id="tlLeave">4:10am</div>
-          </div>
-          <div class="tl-row">
-            <div class="tl-node"></div>
-            <div class="tl-body"><div class="tl-title">Drive on NH-16</div><div class="tl-sub" id="tlDriveSub">NH-16, 74 min · cab (+8m wait)</div></div>
-            <div class="tl-meta">74m</div>
-          </div>
-          <div class="tl-row">
-            <div class="tl-node"></div>
-            <div class="tl-body"><div class="tl-title">Arrive airport</div><div class="tl-sub">Drop-off at Terminal 1</div></div>
-            <div class="tl-meta" id="tlArrive">5:32am</div>
-          </div>
-          <div class="tl-row">
-            <div class="tl-node"></div>
-            <div class="tl-body"><div class="tl-title">Check-in closes</div><div class="tl-sub" id="tlAirline">IndiGo closes check-in · 45m before</div></div>
-            <div class="tl-meta" id="tlCutoff">5:30am</div>
-          </div>
-          <div class="tl-row">
-            <div class="tl-node"></div>
-            <div class="tl-body"><div class="tl-title">Security + gate walk</div><div class="tl-sub" id="tlTermSub">30 min · online check-in done</div></div>
-            <div class="tl-meta">30m</div>
-          </div>
-          <div class="tl-row">
-            <div class="tl-node is-dep"></div>
-            <div class="tl-body"><div class="tl-title">Flight departs</div><div class="tl-sub" id="tlDepartSub">IndiGo 6E 512 → Hyderabad · On time</div></div>
-            <div class="tl-meta" id="tlDepart">6:15am</div>
-          </div>
+        <div class="leaveby">
+          <div class="lbl">Leave home by</div>
+          <div class="time r-leave">4:10am</div>
+          <div class="from">From Madhurawada · NH-16 to Bhogapuram</div>
         </div>
 
-        <div class="buffer-bar" id="bufferBar" style="margin-top:6px">
-          <span>🟢</span>
-          <div class="track"><div class="fill" id="bufferFill" style="width:60%"></div></div>
-          <strong id="bufferLabel" style="white-space:nowrap;font-size:13.5px">18 min buffer — comfortable</strong>
-        </div>
-      </div>
-
-      <!-- Adjust your journey (collapsed, ADR-012 / §5.6) -->
-      <div class="card" style="margin-top:14px">
-        <div class="adjust-head" id="adjustHead">
-          <div>
-            <div style="font-weight:800">Adjust your journey</div>
-            <div class="muted" style="font-size:13px">Own car? Online check-in? Cabin only?</div>
-          </div>
-          <span id="adjustCaret" style="font-size:18px;transition:transform .2s">⌄</span>
+        <!-- Totals at a glance -->
+        <div class="stat-strip">
+          <div class="stat"><div class="sv r-toair">1h 22m</div><div class="sl">Door → airport</div></div>
+          <div class="stat"><div class="sv r-bufferStat">18m</div><div class="sl">Buffer at check-in</div></div>
+          <div class="stat"><div class="sv r-total">2h 5m</div><div class="sl">Home → departure</div></div>
         </div>
 
-        <div id="adjustBody" class="hidden" style="margin-top:8px">
-          <div class="toggle-row">
-            <div class="meta"><div class="t-name">Own car</div><div class="t-desc">Skip the cab wait; choose parking or drop-off</div></div>
-            <label class="switch"><input type="checkbox" class="js-toggle" data-key="ownCar"><span class="slot"></span><span class="knob"></span></label>
-          </div>
-          <div id="parkingChoice" class="hidden" style="padding-bottom:10px">
-            <div class="seg subchoice">
-              <button class="js-park active" data-park="DROPOFF">Drop-off (+0m)</button>
-              <button class="js-park" data-park="PARKING">Parking (+15m)</button>
+        <div class="card card-pad" style="margin-top:14px">
+          <div class="tl">
+            <div class="tl-row">
+              <div class="tl-node"></div>
+              <div class="tl-body"><div class="tl-title">Leave home</div><div class="tl-sub">Cab arrives, you step out</div></div>
+              <div class="tl-meta r-tlLeave">4:10am</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-node"></div>
+              <div class="tl-body"><div class="tl-title">Drive on NH-16</div><div class="tl-sub r-tlDriveSub">NH-16, 74 min · cab (+8m wait)</div></div>
+              <div class="tl-meta r-tlDrive">1h 14m</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-node"></div>
+              <div class="tl-body"><div class="tl-title">Arrive airport</div><div class="tl-sub">Drop-off at Terminal 1</div></div>
+              <div class="tl-meta r-tlArrive">5:32am</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-node"></div>
+              <div class="tl-body"><div class="tl-title">Check-in closes</div><div class="tl-sub r-tlAirline">IndiGo closes check-in · 45m before</div></div>
+              <div class="tl-meta r-tlCutoff">5:30am</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-node"></div>
+              <div class="tl-body"><div class="tl-title">Security + gate walk</div><div class="tl-sub r-tlTermSub">30 min · online check-in done</div></div>
+              <div class="tl-meta r-tlTerm">30m</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-node is-dep"></div>
+              <div class="tl-body"><div class="tl-title">Flight departs</div><div class="tl-sub r-tlDepartSub">IndiGo 6E 512 → Hyderabad · On time</div></div>
+              <div class="tl-meta r-tlDepart">6:15am</div>
             </div>
           </div>
-          <div class="toggle-row">
-            <div class="meta"><div class="t-name">Online check-in done</div><div class="t-desc">Skip the counter queue (~15 min)</div></div>
-            <label class="switch"><input type="checkbox" class="js-toggle" data-key="onlineCheckin" checked><span class="slot"></span><span class="knob"></span></label>
-          </div>
-          <div class="toggle-row">
-            <div class="meta"><div class="t-name">Cabin baggage only</div><div class="t-desc">With online check-in, skip the counter entirely</div></div>
-            <label class="switch"><input type="checkbox" class="js-toggle" data-key="cabinOnly"><span class="slot"></span><span class="knob"></span></label>
-          </div>
-          <div class="toggle-row">
-            <div class="meta"><div class="t-name">Window-shopping buffer</div><div class="t-desc">15 min of relaxed airport time</div></div>
-            <label class="switch"><input type="checkbox" class="js-toggle" data-key="browse" checked><span class="slot"></span><span class="knob"></span></label>
+
+          <div class="buffer-bar r-bufferBar" style="margin-top:6px">
+            <span>🟢</span>
+            <div class="track"><div class="fill r-bufferFill" style="width:60%"></div></div>
+            <strong class="r-bufferLabel" style="white-space:nowrap;font-size:13.5px">18 min buffer — comfortable</strong>
           </div>
         </div>
-      </div>
 
-      <!-- Share — present in ALL phases -->
-      <button class="btn btn-ghost btn-block btn-lg" id="shareBtn" style="margin-top:14px">🔗 Share this timeline</button>
+        <!-- Adjust your journey (collapsed, ADR-012 / §5.6) -->
+        <div class="card" style="margin-top:14px">
+          <div class="adjust-head">
+            <div>
+              <div style="font-weight:800">Adjust your journey</div>
+              <div class="muted" style="font-size:13px">Own car? Online check-in? Cabin only?</div>
+            </div>
+            <span class="adjust-caret">⌄</span>
+          </div>
+
+          <div class="adjust-body hidden" style="margin-top:8px">
+            <div class="toggle-row">
+              <div class="meta"><div class="t-name">Own car</div><div class="t-desc">Skip the cab wait; choose parking or drop-off</div></div>
+              <label class="switch"><input type="checkbox" class="js-toggle" data-key="ownCar"><span class="slot"></span><span class="knob"></span></label>
+            </div>
+            <div class="parking-choice hidden" style="padding-bottom:10px">
+              <div class="seg subchoice">
+                <button class="js-park active" data-park="DROPOFF">Drop-off (+0m)</button>
+                <button class="js-park" data-park="PARKING">Parking (+15m)</button>
+              </div>
+            </div>
+            <div class="toggle-row">
+              <div class="meta"><div class="t-name">Online check-in done</div><div class="t-desc">Skip the counter queue (~15 min)</div></div>
+              <label class="switch"><input type="checkbox" class="js-toggle" data-key="onlineCheckin" checked><span class="slot"></span><span class="knob"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="meta"><div class="t-name">Cabin baggage only</div><div class="t-desc">With online check-in, skip the counter entirely</div></div>
+              <label class="switch"><input type="checkbox" class="js-toggle" data-key="cabinOnly"><span class="slot"></span><span class="knob"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="meta"><div class="t-name">Window-shopping buffer</div><div class="t-desc">15 min of relaxed airport time</div></div>
+              <label class="switch"><input type="checkbox" class="js-toggle" data-key="browse" checked><span class="slot"></span><span class="knob"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Share — present in ALL phases -->
+        <button class="btn btn-ghost btn-block btn-lg r-share" style="margin-top:14px">🔗 Share this timeline</button>
+      </div>
 
       <!-- Phase 1.5 — Email waitlist (shown only in phase 1.5) -->
       <div id="phase15" class="card card-pad hidden" style="margin-top:14px">
