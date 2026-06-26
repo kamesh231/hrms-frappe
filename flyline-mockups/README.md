@@ -15,6 +15,21 @@ python3 -m http.server 8080   # then visit http://localhost:8080
 
 Start at **`index.html`** — it links every screen.
 
+## Single-file prototype (deploy this to Netlify)
+
+**`flyline-prototype.html`** is a self-contained consolidated build: every
+screen, all CSS and JS inlined, switchable via the top nav bar. It is generated
+from the standalone files — keep them as the source of truth and re-generate
+the consolidated file if you edit them.
+
+Deploy options:
+
+- **Drag-and-drop:** drop `flyline-prototype.html` onto Netlify Drop
+  (app.netlify.com/drop) — that one file *is* the site.
+- **Folder deploy:** publish the whole `flyline-mockups/` folder.
+  `netlify.toml` serves `flyline-prototype.html` at `/` while keeping the
+  standalone screens at their own paths (`/landing.html`, `/city.html`, …).
+
 ## Screens → spec map
 
 | File | Route | Spec |

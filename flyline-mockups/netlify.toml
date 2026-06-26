@@ -1,0 +1,10 @@
+# Netlify config for the FlyLine prototype.
+# Publishes this folder and serves the consolidated single-file prototype as the
+# site entry. The standalone screen files remain available at their own paths.
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/flyline-prototype.html"
+  status = 200

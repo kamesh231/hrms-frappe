@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FlyLine — full prototype</title>
+<meta name="description" content="FlyLine v1.0 — consolidated clickable prototype (Vizag to Bhogapuram / VTZ)." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+/* =========================================================================
+   FlyLine — Design System / Shared Styles
+   Mockups for build handoff. Mobile-first. Vanilla CSS, no framework.
+   Brand voice: calm, knowledgeable personal assistant.
+   ========================================================================= */
+
+:root {
+  /* Brand */
+  --ink:        #0B1B2B;   /* near-black navy, primary text */
+  --ink-2:      #33485C;   /* secondary text */
+  --muted:      #6B7C8C;   /* tertiary / hints */
+  --line:       #E4EAF0;   /* hairlines / borders */
+  --surface:    #F5F8FB;   /* page background */
+  --card:       #FFFFFF;
+
+  --primary:    #1C5BFF;   /* FlyLine blue (actions) */
+  --primary-700:#1648CC;
+  --primary-50: #EAF1FF;
+
+  --sky-1:      #1B3A6B;   /* deep airport sky */
+  --sky-2:      #2E6FB7;
+
+  /* Status / buffer semantics */
+  --green:      #0FA968;   /* comfortable buffer / leave-by */
+  --green-50:   #E6F7EF;
+  --amber:      #E08A00;   /* tight buffer */
+  --amber-50:   #FDF3E2;
+  --red:        #E0413B;   /* risky buffer / delay */
+  --red-50:     #FCEBEA;
+
+  /* Airline brand chips */
+  --indigo:     #0033A0;
+  --airindia:   #C8102E;
+  --spicejet:   #E8540D;
+  --akasa:      #4B2E83;
+
+  --radius:     16px;
+  --radius-sm:  10px;
+  --radius-lg:  24px;
+  --shadow-sm:  0 1px 2px rgba(11,27,43,.06), 0 1px 3px rgba(11,27,43,.08);
+  --shadow:     0 6px 24px rgba(11,27,43,.10);
+  --shadow-lg:  0 18px 50px rgba(11,27,43,.18);
+
+  --maxw:       720px;
+  --font:       "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--surface);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+}
+img { max-width: 100%; display: block; }
+a { color: var(--primary); text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+
+/* ---------- Layout ---------- */
+.wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 18px; }
+.section { padding: 28px 0; }
+.stack > * + * { margin-top: 14px; }
+.muted { color: var(--muted); }
+.center { text-align: center; }
+
+/* ---------- Top bar ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(255,255,255,.86);
+  backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 58px; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 800; letter-spacing: -.02em; font-size: 18px; color: var(--ink); }
+.brand .mark {
+  width: 26px; height: 26px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--primary), var(--sky-2));
+  display: grid; place-items: center; color: #fff; font-size: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.topnav { display: flex; align-items: center; gap: 18px; }
+.topnav a { color: var(--ink-2); font-weight: 600; font-size: 14px; }
+.topnav a:hover { color: var(--primary); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid transparent; border-radius: 12px;
+  font-weight: 700; font-size: 15px; padding: 13px 18px;
+  transition: transform .06s ease, box-shadow .2s ease, background .2s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--primary); color: #fff; box-shadow: 0 6px 16px rgba(28,91,255,.28); }
+.btn-primary:hover { background: var(--primary-700); }
+.btn-primary:disabled { background: #C5D2E6; box-shadow: none; cursor: not-allowed; color: #fff; }
+.btn-ghost { background: #fff; color: var(--ink); border-color: var(--line); }
+.btn-ghost:hover { border-color: #C9D6E5; }
+.btn-green { background: var(--green); color: #fff; box-shadow: 0 6px 16px rgba(15,169,104,.28); }
+.btn-wa { background: #25D366; color: #06301c; box-shadow: 0 6px 16px rgba(37,211,102,.30); }
+.btn-block { width: 100%; }
+.btn-lg { padding: 16px 22px; font-size: 16px; border-radius: 14px; }
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 18px;
+}
+.card-pad { padding: 22px; }
+
+/* ---------- Form controls ---------- */
+.field { display: block; }
+.field .lab { font-size: 12.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+.input, .control {
+  width: 100%; border: 1px solid var(--line); background: #fff;
+  border-radius: 12px; padding: 14px 14px; font-size: 16px; color: var(--ink);
+}
+.input:focus, .control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-50); }
+.input::placeholder { color: #9DAFBE; }
+
+.seg { display: inline-flex; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px; gap: 4px; }
+.seg button {
+  border: 0; background: transparent; color: var(--ink-2); font-weight: 700; font-size: 14px;
+  padding: 9px 14px; border-radius: 9px;
+}
+.seg button.active { background: #fff; color: var(--primary); box-shadow: var(--shadow-sm); }
+
+/* ---------- Chips / badges ---------- */
+.chip { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 12.5px; padding: 5px 10px; border-radius: 999px; }
+.chip-green { background: var(--green-50); color: var(--green); }
+.chip-amber { background: var(--amber-50); color: var(--amber); }
+.chip-red   { background: var(--red-50);  color: var(--red); }
+.chip-blue  { background: var(--primary-50); color: var(--primary); }
+.chip-grey  { background: var(--surface); color: var(--ink-2); border: 1px solid var(--line); }
+
+.airline-badge {
+  width: 42px; height: 42px; border-radius: 11px; flex: 0 0 auto;
+  display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 13px; letter-spacing: .02em;
+}
+.al-indigo   { background: var(--indigo); }
+.al-airindia { background: var(--airindia); }
+.al-spicejet { background: var(--spicejet); }
+.al-akasa    { background: var(--akasa); }
+
+/* ---------- Hero (landing) ---------- */
+.hero {
+  position: relative; min-height: 88vh; display: flex; flex-direction: column;
+  color: #fff; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(7,18,32,.30) 0%, rgba(7,18,32,.20) 35%, rgba(7,18,32,.86) 100%),
+    radial-gradient(120% 80% at 70% 10%, #3a76c4 0%, #1b3a6b 55%, #0d2240 100%);
+  background-size: cover; background-position: center;
+}
+.hero .wrap { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; }
+.hero-top { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+.hero-top .brand, .hero-top .brand .mark { color: #fff; }
+.hero-center { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 24px 0 36px; }
+.hero h1 {
+  font-size: 34px; line-height: 1.12; font-weight: 800; letter-spacing: -.02em;
+  margin: 0 0 22px; max-width: 16ch;
+}
+.hero .subtext { color: rgba(255,255,255,.82); font-size: 14px; margin-top: 14px; }
+.hero .social { color: rgba(255,255,255,.92); font-size: 13.5px; margin-top: 10px; display:flex; align-items:center; gap:8px; }
+.dot-live { width: 8px; height: 8px; border-radius: 50%; background: #2ee6a0; box-shadow: 0 0 0 3px rgba(46,230,160,.25); display:inline-block; }
+
+.search-card {
+  background: rgba(255,255,255,.97); color: var(--ink); border-radius: 18px;
+  padding: 14px; box-shadow: var(--shadow-lg); border: 1px solid rgba(255,255,255,.6);
+}
+.search-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
+
+.hero-footer { position: relative; z-index: 1; color: rgba(255,255,255,.75); font-size: 13px; padding: 14px 0 22px; }
+.hero-footer a { color: rgba(255,255,255,.9); }
+
+/* ---------- Discovery flow ---------- */
+.step { animation: rise .42s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.hidden { display: none !important; }
+
+.flight-card {
+  display: flex; align-items: center; gap: 14px; padding: 14px; border: 1px solid var(--line);
+  border-radius: 14px; background: #fff; cursor: pointer; transition: border-color .15s, box-shadow .15s, transform .06s;
+}
+.flight-card:hover { border-color: #C9D6E5; box-shadow: var(--shadow-sm); }
+.flight-card.selected { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-50); }
+.flight-main { flex: 1; min-width: 0; }
+.flight-no { font-weight: 800; font-size: 15px; }
+.flight-route { color: var(--muted); font-size: 13px; }
+.flight-time { text-align: right; }
+.flight-time .t { font-weight: 800; font-size: 17px; }
+
+/* Calculating animation */
+.calc-step { display: flex; align-items: center; gap: 12px; padding: 9px 0; color: var(--muted); font-size: 14.5px; }
+.calc-step .tick {
+  width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); flex: 0 0 auto;
+  display: grid; place-items: center; font-size: 12px; color: transparent; transition: all .3s;
+}
+.calc-step.active { color: var(--ink-2); }
+.calc-step.done { color: var(--ink); }
+.calc-step.done .tick { background: var(--green); border-color: var(--green); color: #fff; }
+.spinner { width: 16px; height: 16px; border: 2px solid var(--primary-50); border-top-color: var(--primary); border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Timeline result */
+.leaveby {
+  background: linear-gradient(135deg, var(--green) 0%, #0c8f58 100%);
+  color: #fff; border-radius: var(--radius); padding: 22px; box-shadow: 0 10px 30px rgba(15,169,104,.30);
+  text-align: center;
+}
+.leaveby .lbl { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; opacity: .9; font-weight: 700; }
+.leaveby .time { font-size: 46px; font-weight: 800; letter-spacing: -.02em; line-height: 1.05; margin: 4px 0 2px; }
+.leaveby .from { font-size: 13.5px; opacity: .92; }
+
+.tl { position: relative; margin: 8px 0; padding-left: 6px; }
+.tl-row { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px dashed var(--line); }
+.tl-row:last-child { border-bottom: 0; }
+.tl-node { position: relative; flex: 0 0 22px; display: flex; justify-content: center; }
+.tl-node::before { content: ""; position: absolute; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 3px solid var(--primary); }
+.tl-node.is-dep::before { border-color: var(--green); }
+.tl-node::after { content: ""; position: absolute; top: 16px; bottom: -18px; width: 2px; background: var(--line); }
+.tl-row:last-child .tl-node::after { display: none; }
+.tl-body { flex: 1; }
+.tl-title { font-weight: 700; font-size: 15px; }
+.tl-sub { color: var(--muted); font-size: 13px; margin-top: 2px; }
+.tl-meta { font-weight: 800; font-size: 15px; white-space: nowrap; }
+
+.buffer-bar { background: var(--green-50); border: 1px solid #BFE9D4; border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
+.buffer-bar.amber { background: var(--amber-50); border-color: #F3D8A6; }
+.buffer-bar .track { flex: 1; height: 8px; background: #fff; border-radius: 999px; overflow: hidden; }
+.buffer-bar .fill { height: 100%; background: var(--green); border-radius: 999px; }
+.buffer-bar.amber .fill { background: var(--amber); }
+
+/* Adjust toggles */
+.adjust-head { display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px solid var(--line); }
+.toggle-row:first-child { border-top: 0; }
+.toggle-row .meta { min-width: 0; }
+.toggle-row .t-name { font-weight: 700; font-size: 15px; }
+.toggle-row .t-desc { color: var(--muted); font-size: 12.5px; }
+.switch { position: relative; width: 48px; height: 28px; flex: 0 0 auto; }
+.switch input { display: none; }
+.switch .slot { position: absolute; inset: 0; background: #CBD7E3; border-radius: 999px; transition: background .2s; }
+.switch .knob { position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; background: #fff; border-radius: 50%; box-shadow: var(--shadow-sm); transition: transform .2s; }
+.switch input:checked + .slot { background: var(--green); }
+.switch input:checked + .slot + .knob { transform: translateX(20px); }
+.subchoice { display: flex; gap: 8px; margin-top: 8px; }
+
+/* Phase banner (mock control) */
+.phase-bar { background: var(--ink); color: #fff; font-size: 12.5px; }
+.phase-bar .wrap { display: flex; align-items: center; gap: 12px; padding: 9px 18px; flex-wrap: wrap; }
+.phase-bar b { color: #7fd7ff; }
+.phase-bar .seg { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.15); }
+.phase-bar .seg button { color: rgba(255,255,255,.7); }
+.phase-bar .seg button.active { background: var(--primary); color: #fff; }
+
+/* AEO / FAQ */
+.qa { border-top: 1px solid var(--line); padding: 16px 0; }
+.qa:first-child { border-top: 0; }
+.qa .q { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+.qa .a { color: var(--ink-2); font-size: 14px; }
+
+/* ---------- My Trips ---------- */
+.trip-active {
+  background: linear-gradient(135deg, var(--sky-1), var(--sky-2)); color: #fff;
+  border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
+}
+.trip-active .row { display: flex; justify-content: space-between; align-items: center; }
+.list-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.list-item:last-child { border-bottom: 0; }
+
+/* ---------- WhatsApp preview ---------- */
+.phone {
+  width: 340px; max-width: 100%; margin: 0 auto; background: #0b141a; border-radius: 30px; padding: 10px;
+  box-shadow: var(--shadow-lg); border: 1px solid #06202c;
+}
+.phone-screen { background: #0b141a; border-radius: 22px; overflow: hidden; }
+.wa-head { background: #1f2c34; color: #e9edef; display: flex; align-items: center; gap: 10px; padding: 12px 14px; }
+.wa-head .av { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--sky-2)); display:grid; place-items:center; color:#fff; font-weight:800; }
+.wa-head .nm { font-weight: 700; font-size: 15px; }
+.wa-head .st { font-size: 11.5px; color: #8696a0; }
+.wa-body {
+  background: #0b141a url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><circle cx='4' cy='4' r='1' fill='%23ffffff08'/></svg>");
+  padding: 16px 12px; min-height: 200px; display: flex; flex-direction: column; gap: 8px;
+}
+.bubble {
+  max-width: 86%; background: #202c33; color: #e9edef; border-radius: 10px; padding: 9px 11px; font-size: 13.5px; line-height: 1.5;
+  box-shadow: 0 1px 1px rgba(0,0,0,.2); position: relative;
+}
+.bubble.in { align-self: flex-start; border-top-left-radius: 2px; }
+.bubble.out { align-self: flex-end; background: #144d37; border-top-right-radius: 2px; }
+.bubble .time { font-size: 10.5px; color: #8696a0; float: right; margin: 6px 0 -2px 10px; }
+.bubble .cta { display: block; margin-top: 8px; background: #1c2e3a; border-top: 1px solid #2a3942; color: #53bdeb; text-align: center; padding: 8px; border-radius: 7px; font-weight: 700; }
+.bubble b { color: #fff; }
+.wa-tag { align-self: center; background: #182229; color: #8696a0; font-size: 11px; padding: 4px 10px; border-radius: 8px; margin: 6px 0; }
+
+/* ---------- Index / hub ---------- */
+.hub-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+.hub-card { display: block; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow-sm); transition: transform .08s, box-shadow .2s; }
+.hub-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.hub-card .rt { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--primary); }
+.hub-card h3 { margin: 6px 0 4px; font-size: 17px; }
+.hub-card p { margin: 0; color: var(--muted); font-size: 13.5px; }
+
+/* Notice / gate */
+.notice { background: var(--primary-50); border: 1px solid #CFE0FF; border-radius: var(--radius); padding: 18px; }
+.gate { text-align: center; padding: 30px 20px; }
+.gate .lock { font-size: 34px; }
+
+footer.site { color: var(--muted); font-size: 13px; padding: 26px 0 40px; text-align: center; }
+footer.site a { color: var(--ink-2); }
+
+/* ---------- Responsive up ---------- */
+@media (min-width: 640px) {
+  .hero h1 { font-size: 52px; }
+  .search-row.two { grid-template-columns: 1.4fr 1fr; }
+  .hub-grid { grid-template-columns: 1fr 1fr; }
+  .section { padding: 40px 0; }
+}
+
+
+/* ===== Consolidated demo shell ===== */
+.demo-nav{position:sticky;top:0;z-index:100;background:#0B1B2B;color:#fff;
+  display:flex;gap:6px;align-items:center;overflow-x:auto;padding:8px 12px;
+  -webkit-overflow-scrolling:touch;box-shadow:0 1px 0 rgba(255,255,255,.06)}
+.demo-nav .dn-brand{font-weight:800;font-size:14px;white-space:nowrap;margin-right:6px;
+  display:flex;align-items:center;gap:6px}
+.demo-nav .dn-brand .mark{width:20px;height:20px;border-radius:6px;
+  background:linear-gradient(135deg,var(--primary),var(--sky-2));display:grid;place-items:center;font-size:11px}
+.navbtn{flex:0 0 auto;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.78);font-weight:700;font-size:13px;padding:7px 12px;border-radius:999px;
+  cursor:pointer;white-space:nowrap}
+.navbtn:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+.navbtn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.screen{display:none}
+.screen.active{display:block;animation:rise .3s ease both}
+
+</style>
+</head>
+<body>
+
+<nav class="demo-nav">
+  <span class="dn-brand"><span class="mark">✈</span> FlyLine</span>
+  <button class="navbtn active" data-go="home">Overview</button><button class="navbtn" data-go="landing">Landing</button><button class="navbtn" data-go="city">City flow ★</button><button class="navbtn" data-go="shared">Shared link</button><button class="navbtn" data-go="trips">My Trips</button><button class="navbtn" data-go="support">Support</button><button class="navbtn" data-go="whatsapp">WhatsApp</button>
+</nav>
+
+<section class="screen active" id="s-home">
+
+  <header class="topbar">
+    <div class="wrap"><div class="brand"><span class="mark">✈</span> FlyLine · Mockups</div>
+      <span class="chip chip-grey">v1.0 · VTZ</span>
+    </div>
+  </header>
+
+  <main class="wrap section">
+    <h1 style="font-size:26px;margin:0 0 6px">FlyLine — clickable HTML mockups</h1>
+    <p class="muted" style="margin-top:0;max-width:60ch">Static prototype of every screen in PRD v4 + ADR v2, for handoff to Codex. Built with plain HTML/CSS/JS — no build step. The city page is fully interactive (search → flights → calculating → timeline → toggles).</p>
+
+    <div class="hub-grid" style="margin-top:22px">
+      <a class="hub-card" href="javascript:void(0)" data-go="landing">
+        <span class="rt">flyline.in</span>
+        <h3>Landing page</h3>
+        <p>Full-viewport hero, search widget, social proof, city links. §5.2</p>
+      </a>
+      <a class="hub-card" href="javascript:void(0)" data-go="city">
+        <span class="rt">/vizag-to-bhogapuram</span>
+        <h3>City discovery flow ★</h3>
+        <p>Interactive single-page reveal + phase switcher + FAQ/AEO. §5.6, ADR-003</p>
+      </a>
+      <a class="hub-card" href="javascript:void(0)" data-go="shared">
+        <span class="rt">/t/[token]</span>
+        <h3>Shared timeline</h3>
+        <p>Read-only result from a signed JWT + opt-in CTA. ADR-011</p>
+      </a>
+      <a class="hub-card" href="javascript:void(0)" data-go="trips">
+        <span class="rt">/trips</span>
+        <h3>My Trips</h3>
+        <p>Active / past trips, referral credits. Clerk-gated. §5.4</p>
+      </a>
+      <a class="hub-card" href="javascript:void(0)" data-go="support">
+        <span class="rt">/support</span>
+        <h3>Support</h3>
+        <p>Paid-only gate + WhatsApp redirect. §5.5</p>
+      </a>
+      <a class="hub-card" href="javascript:void(0)" data-go="whatsapp">
+        <span class="rt">WhatsApp layer</span>
+        <h3>Message previews</h3>
+        <p>All 5 trip phases + inbound redirect. ADR-006</p>
+      </a>
+    </div>
+
+    <div class="card card-pad" style="margin-top:24px">
+      <div style="font-weight:800;margin-bottom:6px">Notes for the build</div>
+      <ul class="muted" style="font-size:14px;margin:0;padding-left:18px;line-height:1.8">
+        <li>Design tokens live in <code>assets/styles.css</code> (<code>:root</code>) — colours, radii, shadows, buffer semantics.</li>
+        <li>The 4-state machine and toggle recalculation logic is mocked in <code>assets/app.js</code>.</li>
+        <li>Buffer colour: green &gt;20m, amber 10–20m, red &lt;10m (per flight-card + buffer bar).</li>
+        <li>Phase switcher (top of city page) toggles Phase 1 / 1.5 / 2 CTAs per ADR-014.</li>
+        <li>See <code>README.md</code> for the screen→spec map.</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="site">FlyLine mockups · flyline.in</footer>
+
+</section><section class="screen" id="s-landing">
+
+  <!-- ============ Landing route: flyline.in (§5.2) ============ -->
+  <section class="hero">
+    <!-- CMS-controlled airport background (ADR-013 / R2 + site_config) -->
+    <div class="hero-bg" role="img" aria-label="Bhogapuram Airport at dawn"></div>
+
+    <div class="wrap">
+      <div class="hero-top">
+        <div class="brand"><span class="mark">✈</span> FlyLine</div>
+        <!-- Returning-user state surfaces here (§5.2 Landing States) -->
+        <a href="javascript:void(0)" data-go="trips" style="color:#fff;font-weight:600;font-size:14px;opacity:.92">My Trips</a>
+      </div>
+
+      <div class="hero-center">
+        <h1>When should you leave for the airport?</h1>
+
+        <!-- Search widget: Airport (pre-selected VTZ) + Date + single CTA -->
+        <div class="search-card">
+          <div class="search-row two">
+            <label class="field">
+              <span class="lab">Starting point</span>
+              <input class="input" id="originLanding" placeholder="Area, hotel or address in Vizag" />
+            </label>
+            <label class="field">
+              <span class="lab">Airport</span>
+              <input class="input" value="Bhogapuram (VTZ)" readonly />
+            </label>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:10px;align-items:center;flex-wrap:wrap">
+            <div class="seg">
+              <button class="active">Today</button>
+              <button>Tomorrow</button>
+              <button>Pick date</button>
+            </div>
+            <a class="btn btn-primary btn-lg" href="javascript:void(0)" data-go="city" style="margin-left:auto">Show my flights →</a>
+          </div>
+        </div>
+
+        <p class="subtext">No sign-up. No app. Just your exact pickup time.</p>
+        <p class="social"><span class="dot-live"></span> 3,247 travellers got their pickup time right this month.</p>
+      </div>
+    </div>
+
+    <div class="hero-footer">
+      <div class="wrap" style="display:flex;gap:16px;align-items:center">
+        <span style="font-weight:700">flyline.in</span>
+        <a href="#">Privacy</a><a href="#">Contact</a>
+        <a href="javascript:void(0)" data-go="home" style="margin-left:auto">↩ Mockup index</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- City CTA links below the fold (kept minimal per spec) -->
+  <section class="section">
+    <div class="wrap">
+      <div class="muted" style="font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:12px;margin-bottom:12px">Cities</div>
+      <div class="hub-grid">
+        <a class="hub-card" href="javascript:void(0)" data-go="city">
+          <span class="rt">flyline.in/vizag-to-bhogapuram</span>
+          <h3>Vizag → Bhogapuram (VTZ)</h3>
+          <p>Live now · NH-16 timing for every flight</p>
+        </a>
+        <a class="hub-card" href="#" style="opacity:.6">
+          <span class="rt">flyline.in/hyderabad-to-rgia</span>
+          <h3>Hyderabad → RGIA</h3>
+          <p>Coming in Phase 2</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site">
+    flyline.in · Bhogapuram Airport (VTZ) · <a href="javascript:void(0)" data-go="home">All mockups</a>
+  </footer>
+
+  <script>
+    // tiny enable-on-type for the hero CTA (full flow lives on city.html)
+    var i = document.getElementById('originLanding');
+  </script>
+
+</section><section class="screen" id="s-city">
+
+
+  <!-- ===== Mock-only control: switch launch phase (ADR-014 / §5.8) ===== -->
+  <div class="phase-bar">
+    <div class="wrap">
+      <span>MOCKUP CONTROL — Launch phase:</span>
+      <div class="seg">
+        <button class="js-phase active" data-phase="1">Phase 1 · ETA</button>
+        <button class="js-phase" data-phase="1.5">1.5 · Waitlist</button>
+        <button class="js-phase" data-phase="2">2 · WhatsApp</button>
+      </div>
+      <a href="javascript:void(0)" data-go="home" style="margin-left:auto;color:#7fd7ff;font-weight:700">↩ Index</a>
+    </div>
+  </div>
+
+  <!-- ===== Top bar ===== -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand"><span class="mark">✈</span> FlyLine</div>
+      <nav class="topnav">
+        <a href="javascript:void(0)" data-go="trips">My Trips</a>
+        <a href="javascript:void(0)" data-go="support">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap section">
+
+    <!-- AEO block above the fold (citable Q&A, §5.3) -->
+    <div style="margin-bottom:8px">
+      <span class="chip chip-blue">Vizag → Bhogapuram (VTZ)</span>
+    </div>
+    <h1 style="font-size:26px;letter-spacing:-.02em;margin:6px 0 4px">When should you leave for Bhogapuram Airport?</h1>
+    <p class="muted" style="margin-top:0">Tell us where you're starting from and pick your flight. We do the rest.</p>
+
+    <!-- ===== Step 1 — Search card ===== -->
+    <div class="card card-pad" style="margin-top:18px">
+      <div class="search-row two">
+        <label class="field">
+          <span class="lab">Starting point</span>
+          <!-- Google Places Autocomplete (ADR-002) -->
+          <input class="input" id="origin" placeholder="e.g. Madhurawada, Blue Diamond Hotel…" value="Madhurawada" autocomplete="off" />
+        </label>
+        <div class="field">
+          <span class="lab">When</span>
+          <div class="seg" style="width:100%;display:flex">
+            <button class="js-date" data-date="today" style="flex:1">Today</button>
+            <button class="js-date active" data-date="tomorrow" style="flex:1">Tomorrow</button>
+            <button class="js-date" data-date="pick" style="flex:1">Pick date</button>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block btn-lg" id="showFlights" style="margin-top:14px">Show flights</button>
+    </div>
+
+    <!-- ===== Step 2 — Flights list (revealed) ===== -->
+    <section id="flightsStep" class="hidden" style="margin-top:22px">
+      <div class="muted" style="font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:12px;margin-bottom:10px">
+        Departures from VTZ · Tomorrow
+      </div>
+      <div class="stack" id="flightsList"></div>
+    </section>
+
+    <!-- ===== Step 3 — Calculating (revealed) ===== -->
+    <section id="calcStep" class="hidden" style="margin-top:22px">
+      <div class="card card-pad">
+        <div style="font-weight:800;font-size:16px;margin-bottom:6px">Working out your pickup time…</div>
+        <div id="calcSteps"></div>
+      </div>
+    </section>
+
+    <!-- ===== Step 4 — Timeline result (revealed) ===== -->
+    <section id="resultStep" class="hidden" style="margin-top:22px">
+
+      <div class="leaveby">
+        <div class="lbl">Leave home by</div>
+        <div class="time" id="leaveTime">4:10am</div>
+        <div class="from">From Madhurawada · NH-16 to Bhogapuram</div>
+      </div>
+
+      <div class="card card-pad" style="margin-top:14px">
+        <div class="tl">
+          <div class="tl-row">
+            <div class="tl-node"></div>
+            <div class="tl-body"><div class="tl-title">Leave home</div><div class="tl-sub">Cab arrives, you step out</div></div>
+            <div class="tl-meta" id="tlLeave">4:10am</div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-node"></div>
+            <div class="tl-body"><div class="tl-title">Drive on NH-16</div><div class="tl-sub" id="tlDriveSub">NH-16, 74 min · cab (+8m wait)</div></div>
+            <div class="tl-meta">74m</div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-node"></div>
+            <div class="tl-body"><div class="tl-title">Arrive airport</div><div class="tl-sub">Drop-off at Terminal 1</div></div>
+            <div class="tl-meta" id="tlArrive">5:32am</div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-node"></div>
+            <div class="tl-body"><div class="tl-title">Check-in closes</div><div class="tl-sub" id="tlAirline">IndiGo closes check-in · 45m before</div></div>
+            <div class="tl-meta" id="tlCutoff">5:30am</div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-node"></div>
+            <div class="tl-body"><div class="tl-title">Security + gate walk</div><div class="tl-sub" id="tlTermSub">30 min · online check-in done</div></div>
+            <div class="tl-meta">30m</div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-node is-dep"></div>
+            <div class="tl-body"><div class="tl-title">Flight departs</div><div class="tl-sub" id="tlDepartSub">IndiGo 6E 512 → Hyderabad · On time</div></div>
+            <div class="tl-meta" id="tlDepart">6:15am</div>
+          </div>
+        </div>
+
+        <div class="buffer-bar" id="bufferBar" style="margin-top:6px">
+          <span>🟢</span>
+          <div class="track"><div class="fill" id="bufferFill" style="width:60%"></div></div>
+          <strong id="bufferLabel" style="white-space:nowrap;font-size:13.5px">18 min buffer — comfortable</strong>
+        </div>
+      </div>
+
+      <!-- Adjust your journey (collapsed, ADR-012 / §5.6) -->
+      <div class="card" style="margin-top:14px">
+        <div class="adjust-head" id="adjustHead">
+          <div>
+            <div style="font-weight:800">Adjust your journey</div>
+            <div class="muted" style="font-size:13px">Own car? Online check-in? Cabin only?</div>
+          </div>
+          <span id="adjustCaret" style="font-size:18px;transition:transform .2s">⌄</span>
+        </div>
+
+        <div id="adjustBody" class="hidden" style="margin-top:8px">
+          <div class="toggle-row">
+            <div class="meta"><div class="t-name">Own car</div><div class="t-desc">Skip the cab wait; choose parking or drop-off</div></div>
+            <label class="switch"><input type="checkbox" class="js-toggle" data-key="ownCar"><span class="slot"></span><span class="knob"></span></label>
+          </div>
+          <div id="parkingChoice" class="hidden" style="padding-bottom:10px">
+            <div class="seg subchoice">
+              <button class="js-park active" data-park="DROPOFF">Drop-off (+0m)</button>
+              <button class="js-park" data-park="PARKING">Parking (+15m)</button>
+            </div>
+          </div>
+          <div class="toggle-row">
+            <div class="meta"><div class="t-name">Online check-in done</div><div class="t-desc">Skip the counter queue (~15 min)</div></div>
+            <label class="switch"><input type="checkbox" class="js-toggle" data-key="onlineCheckin" checked><span class="slot"></span><span class="knob"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="meta"><div class="t-name">Cabin baggage only</div><div class="t-desc">With online check-in, skip the counter entirely</div></div>
+            <label class="switch"><input type="checkbox" class="js-toggle" data-key="cabinOnly"><span class="slot"></span><span class="knob"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="meta"><div class="t-name">Window-shopping buffer</div><div class="t-desc">15 min of relaxed airport time</div></div>
+            <label class="switch"><input type="checkbox" class="js-toggle" data-key="browse" checked><span class="slot"></span><span class="knob"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Share — present in ALL phases -->
+      <button class="btn btn-ghost btn-block btn-lg" id="shareBtn" style="margin-top:14px">🔗 Share this timeline</button>
+
+      <!-- Phase 1.5 — Email waitlist (shown only in phase 1.5) -->
+      <div id="phase15" class="card card-pad hidden" style="margin-top:14px">
+        <div style="font-weight:800">Want a WhatsApp reminder before your flight?</div>
+        <p class="muted" style="margin:6px 0 12px">We're building it. Get an email when reminders go live.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input class="input" placeholder="you@email.com" style="flex:1;min-width:180px" />
+          <button class="btn btn-primary">Notify me</button>
+        </div>
+      </div>
+
+      <!-- Phase 2 — WhatsApp opt-in (shown only in phase 2) -->
+      <div id="phase2" class="card card-pad hidden" style="margin-top:14px;border-color:#BFE9CE">
+        <div style="font-weight:800">Send this to your WhatsApp — free</div>
+        <p class="muted" style="margin:6px 0 12px">We'll remind you at the right time, the evening before. One tap to confirm.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input class="input" placeholder="+91 mobile number" style="flex:1;min-width:180px" value="+91 " />
+          <button class="btn btn-wa">Send to WhatsApp</button>
+        </div>
+        <p class="muted" style="font-size:12px;margin:10px 0 0">You'll get a confirmation message — reply <b>YES</b> to start. (Meta double opt-in)</p>
+      </div>
+
+    </section>
+
+    <!-- ===== AEO / FAQ block (static, citable — §5.3) ===== -->
+    <section class="section" id="faq" style="margin-top:10px">
+      <h2 style="font-size:20px;letter-spacing:-.01em">Common questions</h2>
+      <div class="card card-pad" style="margin-top:10px">
+        <div class="qa">
+          <div class="q">What time should I leave for Bhogapuram Airport from Madhurawada?</div>
+          <div class="a">From Madhurawada, allow 70–80 minutes via NH-16. Add your airline's check-in cutoff (45 min IndiGo, 60 min Air India) and ~35 min terminal processing. For a 6:15am flight, leave by 4:10am.</div>
+        </div>
+        <div class="qa">
+          <div class="q">How far is Bhogapuram Airport from Visakhapatnam?</div>
+          <div class="a">Bhogapuram Airport (VTZ) is about 42 km from Vizag city centre via NH-16. Drive time ranges from 65 minutes off-peak to 85 minutes at morning peak.</div>
+        </div>
+        <div class="qa">
+          <div class="q">What is IndiGo's check-in cutoff at Bhogapuram?</div>
+          <div class="a">IndiGo closes check-in 45 minutes before departure for domestic flights. SpiceJet is 45 minutes; Air India is 60 minutes. FlyLine applies your airline's exact cutoff automatically.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site">
+    flyline.in/vizag-to-bhogapuram · <a href="javascript:void(0)" data-go="home">All mockups</a>
+  </footer>
+
+  
+
+</section><section class="screen" id="s-shared">
+
+  <!-- ===== /t/[token] — read-only result from a signed JWT (ADR-011) ===== -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand"><span class="mark">✈</span> FlyLine</div>
+      <a href="javascript:void(0)" data-go="city" class="btn btn-ghost" style="padding:8px 14px;font-size:14px">Plan my own trip</a>
+    </div>
+  </header>
+
+  <main class="wrap section">
+    <div class="notice" style="margin-bottom:18px">
+      <strong>Someone shared this timeline with you.</strong>
+      <div class="muted" style="font-size:13.5px;margin-top:4px">Read-only · for IndiGo 6E 512 from Madhurawada · valid 4 days</div>
+    </div>
+
+    <div class="leaveby">
+      <div class="lbl">Leave home by</div>
+      <div class="time">4:10am</div>
+      <div class="from">From Madhurawada · NH-16 to Bhogapuram</div>
+    </div>
+
+    <div class="card card-pad" style="margin-top:14px">
+      <div class="tl">
+        <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Leave home</div><div class="tl-sub">Cab arrives, you step out</div></div><div class="tl-meta">4:10am</div></div>
+        <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Drive on NH-16</div><div class="tl-sub">74 min · clear at this hour</div></div><div class="tl-meta">74m</div></div>
+        <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Arrive airport</div><div class="tl-sub">Drop-off at Terminal 1</div></div><div class="tl-meta">5:32am</div></div>
+        <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Check-in closes</div><div class="tl-sub">IndiGo · 45m before</div></div><div class="tl-meta">5:30am</div></div>
+        <div class="tl-row"><div class="tl-node"></div><div class="tl-body"><div class="tl-title">Security + gate walk</div><div class="tl-sub">30 min · online check-in done</div></div><div class="tl-meta">30m</div></div>
+        <div class="tl-row"><div class="tl-node is-dep"></div><div class="tl-body"><div class="tl-title">Flight departs</div><div class="tl-sub">IndiGo 6E 512 → Hyderabad · On time</div></div><div class="tl-meta">6:15am</div></div>
+      </div>
+      <div class="buffer-bar" style="margin-top:6px">
+        <span>🟢</span><div class="track"><div class="fill" style="width:60%"></div></div>
+        <strong style="white-space:nowrap;font-size:13.5px">18 min buffer — comfortable</strong>
+      </div>
+    </div>
+
+    <!-- Opt-in CTA at the bottom — the viral entry point (ADR-001) -->
+    <div class="card card-pad" style="margin-top:14px;border-color:#BFE9CE">
+      <div style="font-weight:800">Flying soon yourself?</div>
+      <p class="muted" style="margin:6px 0 12px">Get your own pickup time and a free WhatsApp reminder the evening before.</p>
+      <a class="btn btn-primary btn-block btn-lg" href="javascript:void(0)" data-go="city">Plan my trip from Vizag</a>
+    </div>
+  </main>
+
+  <footer class="site">flyline.in/t/eyJhbGciOiJI… · <a href="javascript:void(0)" data-go="home">All mockups</a></footer>
+
+</section><section class="screen" id="s-trips">
+
+  <!-- ===== /trips — Clerk phone OTP gated (ADR-009 / §5.4) ===== -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand"><span class="mark">✈</span> FlyLine</div>
+      <nav class="topnav"><a href="javascript:void(0)" data-go="city">New trip</a><a href="javascript:void(0)" data-go="support">Support</a></nav>
+    </div>
+  </header>
+
+  <main class="wrap section">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <h1 style="font-size:24px;margin:0">My Trips</h1>
+      <span class="chip chip-grey">+91 98xxx xxx21</span>
+    </div>
+
+    <!-- Active trip -->
+    <div class="muted" style="font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:12px;margin:18px 0 10px">Active trip</div>
+    <div class="trip-active">
+      <div class="row">
+        <div>
+          <div style="font-weight:800;font-size:18px">IndiGo 6E 512 → Hyderabad</div>
+          <div style="opacity:.85;font-size:13.5px;margin-top:2px">Tomorrow · departs 6:15am</div>
+        </div>
+        <span class="chip chip-green" style="background:rgba(255,255,255,.18);color:#cdfbe4">On time</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px">
+        <div>
+          <div style="opacity:.8;font-size:12px;text-transform:uppercase;letter-spacing:.06em">Pickup</div>
+          <div style="font-weight:800;font-size:22px">4:10am</div>
+        </div>
+        <a class="btn btn-ghost" href="javascript:void(0)" data-go="shared" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.25)">View live timeline →</a>
+      </div>
+    </div>
+
+    <!-- Referral credits -->
+    <div class="card card-pad" style="margin-top:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div>
+          <div style="font-weight:800">Refer a friend, earn ₹5</div>
+          <div class="muted" style="font-size:13.5px">Balance: <strong style="color:var(--green)">₹10</strong> · expires 12 Sep 2026</div>
+        </div>
+        <button class="btn btn-primary">Copy referral link</button>
+      </div>
+      <div class="chip chip-blue" style="margin-top:12px;font-family:ui-monospace,Menlo,monospace">flyline.in/r/FL-KM47</div>
+    </div>
+
+    <!-- Past trips -->
+    <div class="muted" style="font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:12px;margin:22px 0 6px">Past trips</div>
+    <div class="card">
+      <div class="list-item">
+        <div class="airline-badge al-indigo">6E</div>
+        <div style="flex:1"><div style="font-weight:700">6E 512 → Hyderabad</div><div class="muted" style="font-size:13px">12 Jun · pickup 4:10am</div></div>
+        <span class="chip chip-green">★ Perfect</span>
+      </div>
+      <div class="list-item">
+        <div class="airline-badge al-airindia">AI</div>
+        <div style="flex:1"><div style="font-weight:700">AI 543 → Delhi</div><div class="muted" style="font-size:13px">28 May · pickup 5:40am</div></div>
+        <span class="chip chip-amber">Slightly early</span>
+      </div>
+      <div class="list-item">
+        <div class="airline-badge al-spicejet">SG</div>
+        <div style="flex:1"><div style="font-weight:700">SG 231 → Bengaluru</div><div class="muted" style="font-size:13px">3 May · pickup 7:15am</div></div>
+        <span class="chip chip-grey">Not rated</span>
+      </div>
+    </div>
+
+    <p class="muted" style="font-size:13px;margin-top:18px">Phone number is managed by Clerk · <a href="#">Sign out</a></p>
+  </main>
+
+  <footer class="site">flyline.in/trips · <a href="javascript:void(0)" data-go="home">All mockups</a></footer>
+
+</section><section class="screen" id="s-support">
+
+  <!-- ===== /support — gated to paid Morning Companion users (§5.5) ===== -->
+  <div class="phase-bar">
+    <div class="wrap">
+      <span>MOCKUP CONTROL — Access state:</span>
+      <div class="seg">
+        <button class="js-access active" data-state="paid">Paid user</button>
+        <button class="js-access" data-state="free">Free user</button>
+      </div>
+      <a href="javascript:void(0)" data-go="home" style="margin-left:auto;color:#7fd7ff;font-weight:700">↩ Index</a>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand"><span class="mark">✈</span> FlyLine</div>
+      <nav class="topnav"><a href="javascript:void(0)" data-go="trips">My Trips</a><a href="javascript:void(0)" data-go="city">New trip</a></nav>
+    </div>
+  </header>
+
+  <main class="wrap section">
+    <h1 style="font-size:24px;margin:0 0 18px">Support</h1>
+
+    <!-- Paid state -->
+    <div id="paidState">
+      <div class="card card-pad">
+        <div style="font-weight:800;font-size:18px">Chat with us on WhatsApp</div>
+        <p class="muted" style="margin:6px 0 14px">We respond during business hours, 9am–9pm IST. In transit? Use the priority line below.</p>
+        <a class="btn btn-wa btn-block btn-lg" href="#">💬 Open WhatsApp chat</a>
+        <p class="muted" style="font-size:12.5px;margin:12px 0 0">Pre-filled: “Hi FlyLine support, I need help with trip #VTZ-6E512-0627 — …”</p>
+      </div>
+
+      <div class="card card-pad" style="margin-top:14px">
+        <div style="font-weight:800;margin-bottom:8px">Response times</div>
+        <div class="list-item"><div style="flex:1">Wrong pickup time calculated</div><span class="chip chip-green">&lt; 30 min</span></div>
+        <div class="list-item"><div style="flex:1">Payment / double charge</div><span class="chip chip-green">&lt; 1 hr</span></div>
+        <div class="list-item"><div style="flex:1">Message not received</div><span class="chip chip-amber">&lt; 2 hrs</span></div>
+        <div class="list-item"><div style="flex:1">Refund request</div><span class="chip chip-amber">&lt; 24 hrs</span></div>
+      </div>
+    </div>
+
+    <!-- Free state (gate) -->
+    <div id="freeState" class="hidden">
+      <div class="card gate">
+        <div class="lock">🔒</div>
+        <h2 style="font-size:19px;margin:8px 0 6px">Support is for Morning Companion subscribers</h2>
+        <p class="muted" style="max-width:42ch;margin:0 auto 16px">Your next trip update includes priority support. Add live morning updates for ₹29 and chat with us any time.</p>
+        <a class="btn btn-primary btn-lg" href="javascript:void(0)" data-go="city">See my next trip — ₹29</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site">flyline.in/support · <a href="javascript:void(0)" data-go="home">All mockups</a></footer>
+
+  <script>
+    document.querySelectorAll('.js-access').forEach(function(b){
+      b.addEventListener('click', function(){
+        document.querySelectorAll('.js-access').forEach(function(x){x.classList.remove('active');});
+        b.classList.add('active');
+        var paid = b.dataset.state === 'paid';
+        document.getElementById('paidState').classList.toggle('hidden', !paid);
+        document.getElementById('freeState').classList.toggle('hidden', paid);
+      });
+    });
+  </script>
+
+</section><section class="screen" id="s-whatsapp">
+
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand"><span class="mark">✈</span> FlyLine</div>
+      <a href="javascript:void(0)" data-go="home" class="topnav" style="font-weight:600;font-size:14px">↩ Index</a>
+    </div>
+  </header>
+
+  <main class="wrap section">
+    <h1 style="font-size:24px;margin:0 0 4px">WhatsApp intelligence layer</h1>
+    <p class="muted" style="margin-top:0">Every message is Claude-generated from live context — not a static template (ADR-006). These are previews of the 5-phase per-trip journey.</p>
+
+    <div class="wa-grid" style="margin-top:24px">
+
+      <!-- Phase 2 — T-12h reminder -->
+      <div>
+        <div class="phase-label">Phase 2 · T-12h reminder (free, conversion trigger)</div>
+        <div class="phase-note">Clamped to 6am–10pm. Pickup time + open loop + ₹29 CTA.</div>
+        <div class="phone"><div class="phone-screen">
+          <div class="wa-head"><div class="av">F</div><div><div class="nm">FlyLine</div><div class="st">business account</div></div></div>
+          <div class="wa-body">
+            <div class="wa-tag">Yesterday 6:15 PM</div>
+            <div class="bubble in">
+              FlyLine check-in — your <b>IndiGo 6E-512 to Delhi</b> departs tomorrow at <b>9:40am</b>.<br><br>
+              Based on today's NH-16 data, your pickup window is <b>6:15am from Madhurawada</b>.<br><br>
+              NH-16 is running lighter than average at that hour on Wednesdays — you have a comfortable buffer. IndiGo's 45-min cutoff means the counter closes at 8:55am. Your window gives you 18 minutes of slack.<br><br>
+              Tomorrow morning we'll confirm if this still holds — or tell you to move earlier if NH-16 is acting up.
+              <span class="cta">Watch it tomorrow → ₹29 only</span>
+              <span class="time">6:15 PM</span>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Phase 2 — 6am fallback -->
+      <div>
+        <div class="phase-label">Phase 2 · Non-converter fallback (6am, departure day)</div>
+        <div class="phase-note">Fires only if not yet paid. Morning anxiety peak.</div>
+        <div class="phone"><div class="phone-screen">
+          <div class="wa-head"><div class="av">F</div><div><div class="nm">FlyLine</div><div class="st">business account</div></div></div>
+          <div class="wa-body">
+            <div class="wa-tag">Today 6:00 AM</div>
+            <div class="bubble in">
+              One thing about your <b>6:15am pickup</b> today —<br><br>
+              NH-16 is showing 12 minutes heavier than yesterday at 6am. Your window is tighter than average today. Worth leaving 10 minutes earlier if you can — puts you ahead of the squeeze at the BRTS junction.<br><br>
+              Real-time updates through your journey: ₹29. Reply <b>TRACK</b>.
+              <span class="time">6:00 AM</span>
+            </div>
+            <div class="bubble out">TRACK<span class="time">6:02 AM ✓✓</span></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Phase 3 — Morning Companion -->
+      <div>
+        <div class="phase-label">Phase 3 · Morning Companion (paid, ₹29)</div>
+        <div class="phase-note">T-3h brief → T-90min → step-out nudge.</div>
+        <div class="phone"><div class="phone-screen">
+          <div class="wa-head"><div class="av">F</div><div><div class="nm">FlyLine</div><div class="st">online</div></div></div>
+          <div class="wa-body">
+            <div class="wa-tag">Today</div>
+            <div class="bubble in">
+              <b>6:15am pickup still on.</b><br><br>
+              Checked three times — NH-16 is behaving this morning. No incidents between Madhurawada and the airport junction. IndiGo 6E-512 shows no delay. Your 18-minute buffer is intact.<br><br>
+              We'll ping again if anything changes before step-out time.
+              <span class="time">3:15 AM</span>
+            </div>
+            <div class="bubble in">
+              Final check — still on schedule. No delay on 6E-512. Step out at 6:15am sharp.
+              <span class="time">4:45 AM</span>
+            </div>
+            <div class="bubble in">
+              <b>Time to go.</b> 🚕<br><br>
+              Your cab should be here by 6:15am. NH-16 is clear. IndiGo 6E-512: on time, terminal entry smooth.<br><br>
+              Safe travels. We'll keep watching until you board.
+              <span class="time">6:10 AM</span>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Phase 4 — In transit -->
+      <div>
+        <div class="phase-label">Phase 4 · In transit (silent by default)</div>
+        <div class="phase-note">Only speaks on a &gt;20 min delay shift, then restore.</div>
+        <div class="phone"><div class="phone-screen">
+          <div class="wa-head"><div class="av">F</div><div><div class="nm">FlyLine</div><div class="st">online</div></div></div>
+          <div class="wa-body">
+            <div class="wa-tag">Today 8:05 AM</div>
+            <div class="bubble in">
+              <b>6E-512 delayed 45 minutes.</b> New departure: 10:25am.<br><br>
+              You now have extra buffer — no rush at security. Check-in counter is still open; take your time through the terminal. With the new departure, you have 22 minutes of slack even accounting for the delay. IndiGo hasn't updated the gate yet — I'll send the gate number when confirmed.
+              <span class="time">8:05 AM</span>
+            </div>
+            <div class="bubble in">
+              ✅ <b>Flight back on time.</b> Your original 9:40am window is back — you're well-positioned.
+              <span class="time">8:40 AM</span>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Phase 5 — Post flight -->
+      <div>
+        <div class="phase-label">Phase 5 · Post-flight feedback (all users)</div>
+        <div class="phase-note">T+15 boarding check → Landing+30 rating → referral.</div>
+        <div class="phone"><div class="phone-screen">
+          <div class="wa-head"><div class="av">F</div><div><div class="nm">FlyLine</div><div class="st">business account</div></div></div>
+          <div class="wa-body">
+            <div class="wa-tag">Today</div>
+            <div class="bubble in">
+              Did you board comfortably?<br><br>
+              Reply: <b>1</b> Yes, smooth · <b>2</b> A bit rushed · <b>3</b> Nearly missed it
+              <span class="time">9:55 AM</span>
+            </div>
+            <div class="bubble out">1<span class="time">9:58 AM ✓✓</span></div>
+            <div class="bubble in">
+              IndiGo 6E-512 touched down in Delhi at 11:52am. Was <b>6:15am from Madhurawada</b> the right pickup time?<br><br>
+              Reply: <b>1</b> Perfect · <b>2</b> Too early · <b>3</b> Too late / close
+              <span class="time">12:22 PM</span>
+            </div>
+            <div class="bubble in">
+              Know someone flying from Vizag? Forward this — their first trip is always free.<br><br>
+              Your code: <b>FL-KM47</b><br>flyline.in/r/FL-KM47
+              <span class="time">12:23 PM</span>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Inbound redirect -->
+      <div>
+        <div class="phase-label">Inbound "Hi" → web redirect (no bot, ADR-015)</div>
+        <div class="phase-note">Any inbound message gets one pre-approved redirect reply.</div>
+        <div class="phone"><div class="phone-screen">
+          <div class="wa-head"><div class="av">F</div><div><div class="nm">FlyLine</div><div class="st">business account</div></div></div>
+          <div class="wa-body">
+            <div class="wa-tag">Today</div>
+            <div class="bubble out">Hi<span class="time">10:30 AM ✓✓</span></div>
+            <div class="bubble in">
+              Hi! To search flights and see your airport timeline, visit:<br><br>
+              <b>flyline.in/vizag-to-bhogapuram</b> 🛫<br><br>
+              It's instant — enter your area and pick your flight.
+              <span class="time">10:30 AM</span>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site">Claude Haiku + Sonnet generated · <a href="javascript:void(0)" data-go="home">All mockups</a></footer>
+
+</section>
+
+<script>
+/* ---- screen router ---- */
+(function(){
+  var KNOWN = { "home":1, "landing":1, "city":1, "shared":1, "trips":1, "support":1, "whatsapp":1 };
+  function show(id){
+    if(!KNOWN[id]) id = "home";
+    document.querySelectorAll(".screen").forEach(function(s){
+      s.classList.toggle("active", s.id === "s-"+id);
+    });
+    document.querySelectorAll(".navbtn").forEach(function(b){
+      b.classList.toggle("active", b.dataset.go === id);
+    });
+    if(location.hash !== "#"+id) history.replaceState(null,"","#"+id);
+    window.scrollTo({top:0,behavior:"instant"});
+  }
+  document.addEventListener("click", function(e){
+    var t = e.target.closest("[data-go]");
+    if(t){ e.preventDefault(); show(t.dataset.go); }
+  });
+  window.addEventListener("hashchange", function(){
+    var h = location.hash.replace("#","");
+    if(KNOWN[h]) show(h);
+  });
+  var start = location.hash.replace("#","");
+  show(KNOWN[start] ? start : "home");
+})();
+</script>
+
+<script>
+/* =========================================================================
+   FlyLine mockups — discovery flow interactivity (vanilla JS)
+   Drives the 4-state machine described in ADR-003:
+   SEARCH -> FLIGHTS -> CALCULATING -> RESULT
+   Plus post-result toggle recalculation (ADR-012) and phase switching (ADR-014).
+   This is mock logic for the prototype, not production timing math.
+   ========================================================================= */
+
+(function () {
+  "use strict";
+
+  /* ----- Mock departure board (AviationStack shape, simplified) ----- */
+  const FLIGHTS = [
+    { code: "6E 512",  airline: "IndiGo",   cls: "al-indigo",   to: "Hyderabad", dep: "06:15", cutoff: 45, buffer: 18, status: "On time" },
+    { code: "AI 543",  airline: "Air India", cls: "al-airindia", to: "Delhi",     dep: "07:40", cutoff: 60, buffer: 12, status: "On time" },
+    { code: "SG 231",  airline: "SpiceJet",  cls: "al-spicejet", to: "Bengaluru", dep: "09:25", cutoff: 45, buffer: 8,  status: "Delayed 20m" },
+    { code: "QP 1408", airline: "Akasa",     cls: "al-akasa",    to: "Mumbai",    dep: "11:10", cutoff: 45, buffer: 24, status: "On time" },
+  ];
+
+  const CALC_STEPS = [
+    "Locating Madhurawada on NH-16",
+    "Checking live NH-16 traffic (4–5am window)",
+    "Looking up IndiGo check-in cutoff",
+    "Calculating terminal processing time",
+    "Adding your window-shopping buffer",
+    "Verifying flight status",
+  ];
+
+  const $  = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+  /* ----- Search card ----- */
+  const origin = $("#origin");
+  const showBtn = $("#showFlights");
+  let dateChoice = "tomorrow";
+
+  if (showBtn) {
+    function refreshBtn() {
+      showBtn.disabled = !(origin && origin.value.trim().length > 1);
+    }
+    if (origin) origin.addEventListener("input", refreshBtn);
+    refreshBtn();
+
+    $$(".js-date").forEach((b) =>
+      b.addEventListener("click", () => {
+        $$(".js-date").forEach((x) => x.classList.remove("active"));
+        b.classList.add("active");
+        dateChoice = b.dataset.date;
+      })
+    );
+
+    showBtn.addEventListener("click", () => {
+      renderFlights();
+      reveal("#flightsStep");
+    });
+  }
+
+  /* ----- Flights list ----- */
+  function bufferChip(mins) {
+    if (mins > 20) return `<span class="chip chip-green">Leave by · ${mins}m buffer</span>`;
+    if (mins >= 10) return `<span class="chip chip-amber">Tight · ${mins}m buffer</span>`;
+    return `<span class="chip chip-red">Risky · ${mins}m buffer</span>`;
+  }
+
+  function renderFlights() {
+    const list = $("#flightsList");
+    if (!list) return;
+    list.innerHTML = FLIGHTS.map((f, i) => `
+      <div class="flight-card" data-i="${i}" role="button" tabindex="0">
+        <div class="airline-badge ${f.cls}">${f.code.split(" ")[0]}</div>
+        <div class="flight-main">
+          <div class="flight-no">${f.airline} ${f.code}</div>
+          <div class="flight-route">VTZ → ${f.to}</div>
+          <div style="margin-top:8px">${bufferChip(f.buffer)}</div>
+        </div>
+        <div class="flight-time">
+          <div class="t">${to12(f.dep)}</div>
+          <div class="muted" style="font-size:12px">${f.status}</div>
+        </div>
+      </div>`).join("");
+
+    $$(".flight-card", list).forEach((c) => {
+      const pick = () => selectFlight(parseInt(c.dataset.i, 10), c);
+      c.addEventListener("click", pick);
+      c.addEventListener("keydown", (e) => { if (e.key === "Enter") pick(); });
+    });
+  }
+
+  /* ----- Calculating animation ----- */
+  function selectFlight(i, el) {
+    $$(".flight-card").forEach((c) => c.classList.remove("selected"));
+    if (el) el.classList.add("selected");
+    window.__flight = FLIGHTS[i];
+
+    const box = $("#calcSteps");
+    if (box) {
+      box.innerHTML = CALC_STEPS.map((s) => `
+        <div class="calc-step">
+          <span class="tick">✓</span><span>${s}</span>
+        </div>`).join("");
+    }
+    $("#resultStep") && $("#resultStep").classList.add("hidden");
+    reveal("#calcStep");
+
+    const steps = $$("#calcSteps .calc-step");
+    let n = 0;
+    const advance = () => {
+      if (n > 0) steps[n - 1].classList.remove("active"), steps[n - 1].classList.add("done");
+      if (n < steps.length) {
+        steps[n].classList.add("active");
+        steps[n].querySelector(".tick").innerHTML = '<span class="spinner"></span>';
+        n++;
+        setTimeout(() => { if (n > 0) steps[n - 1].querySelector(".tick").textContent = "✓"; advance(); }, 540);
+      } else {
+        setTimeout(showResult, 350);
+      }
+    };
+    advance();
+  }
+
+  /* ----- Result + toggle recalculation ----- */
+  // Baseline component minutes (mock) for the selected-flight timeline.
+  const BASE = {
+    cabWait: 8, parkingWalk: 15, checkinQueue: 15,
+    security: 20, gateWalk: 10, browse: 15, safety: 10, travel: 74,
+  };
+
+  const toggles = { ownCar: false, parking: "DROPOFF", onlineCheckin: true, cabinOnly: false, browse: true };
+
+  function showResult() {
+    $("#calcStep") && $("#calcStep").classList.add("hidden");
+    reveal("#resultStep");
+    recalc();
+  }
+
+  function recalc() {
+    const f = window.__flight || FLIGHTS[0];
+    const t = toggles;
+    let terminal = BASE.security + BASE.gateWalk + (t.onlineCheckin ? 0 : BASE.checkinQueue);
+    if (t.cabinOnly && t.onlineCheckin) terminal = BASE.security + BASE.gateWalk; // skip counter
+    const cabWait  = t.ownCar ? 0 : BASE.cabWait;
+    const parking  = (t.ownCar && t.parking === "PARKING") ? BASE.parkingWalk : 0;
+    const browse   = t.browse ? BASE.browse : 0;
+
+    const depMin = toMin(f.dep);
+    const total  = f.cutoff + terminal + BASE.travel + cabWait + parking + browse + BASE.safety;
+    const leave  = depMin - total;
+    const arrive = leave + cabWait + parking + BASE.travel;
+    const cutoffClose = depMin - f.cutoff;
+    const buffer = cutoffClose - arrive;
+
+    $("#leaveTime").textContent = to12(fromMin(leave));
+    $("#tlLeave").textContent  = to12(fromMin(leave));
+    $("#tlArrive").textContent = to12(fromMin(arrive));
+    $("#tlCutoff").textContent = to12(fromMin(cutoffClose));
+    $("#tlDepart").textContent = to12(f.dep);
+    $("#tlAirline").textContent = `${f.airline} closes check-in · ${f.cutoff}m before`;
+    $("#tlDepartSub").textContent = `${f.airline} ${f.code} → ${f.to} · ${f.status}`;
+    $("#tlDriveSub").textContent = `NH-16, ${BASE.travel} min · ${t.ownCar ? "your car" : "cab"} ${cabWait ? "(+" + cabWait + "m wait)" : ""}`;
+    $("#tlTermSub").textContent = `${terminal} min${t.onlineCheckin ? " · online check-in done" : " · counter check-in"}`;
+
+    const bar = $("#bufferBar");
+    const fill = $("#bufferFill");
+    const lbl = $("#bufferLabel");
+    const pct = Math.max(8, Math.min(100, (buffer / 30) * 100));
+    fill.style.width = pct + "%";
+    if (buffer >= 15) { bar.classList.remove("amber"); lbl.textContent = `${buffer} min buffer — comfortable`; }
+    else { bar.classList.add("amber"); lbl.textContent = `${buffer} min buffer — a little tight`; }
+  }
+
+  // wire toggles
+  $$(".js-toggle").forEach((el) =>
+    el.addEventListener("change", () => {
+      const key = el.dataset.key;
+      toggles[key] = el.checked;
+      if (key === "ownCar") {
+        $("#parkingChoice").classList.toggle("hidden", !el.checked);
+      }
+      recalc();
+    })
+  );
+  $$(".js-park").forEach((b) =>
+    b.addEventListener("click", () => {
+      $$(".js-park").forEach((x) => x.classList.remove("active"));
+      b.classList.add("active");
+      toggles.parking = b.dataset.park;
+      recalc();
+    })
+  );
+
+  const adjHead = $("#adjustHead");
+  if (adjHead) adjHead.addEventListener("click", () => {
+    $("#adjustBody").classList.toggle("hidden");
+    $("#adjustCaret").classList.toggle("open");
+  });
+
+  /* ----- Phase switching (ADR-014 / §5.8) ----- */
+  $$(".js-phase").forEach((b) =>
+    b.addEventListener("click", () => {
+      $$(".js-phase").forEach((x) => x.classList.remove("active"));
+      b.classList.add("active");
+      const p = b.dataset.phase;
+      $("#phase15") && $("#phase15").classList.toggle("hidden", p !== "1.5");
+      $("#phase2")  && $("#phase2").classList.toggle("hidden", p !== "2");
+    })
+  );
+
+  /* ----- Share (mock) ----- */
+  const shareBtn = $("#shareBtn");
+  if (shareBtn) shareBtn.addEventListener("click", () => {
+    const link = "flyline.in/t/eyJhbGciOiJI...Sdk9";
+    navigator.clipboard && navigator.clipboard.writeText("https://" + link).catch(() => {});
+    shareBtn.textContent = "✓ Link copied";
+    setTimeout(() => (shareBtn.innerHTML = "🔗 Share this timeline"), 1800);
+  });
+
+  /* ----- helpers ----- */
+  function reveal(sel) {
+    const el = $(sel);
+    if (!el) return;
+    el.classList.remove("hidden");
+    el.classList.add("step");
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  function toMin(hhmm) { const [h, m] = hhmm.split(":").map(Number); return h * 60 + m; }
+  function fromMin(min) { min = (min + 1440) % 1440; const h = Math.floor(min / 60); const m = min % 60; return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`; }
+  function to12(hhmm) {
+    const [h, m] = hhmm.split(":").map(Number);
+    const ap = h < 12 ? "am" : "pm";
+    const hh = ((h + 11) % 12) + 1;
+    return `${hh}:${String(m).padStart(2, "0")}${ap}`;
+  }
+})();
+
+</script>
+</body>
+</html>
